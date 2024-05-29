@@ -1,4 +1,11 @@
-import {configureStore} from '@reduxjs/toolkit'
+// import {configureStore}from '@reduxjs/toolkit';
 
-const Store= configureStore({});
-export default Store;
+
+
+
+// const Store =configureStore({
+//     auth:{}
+// });
+
+
+// export default Store;
