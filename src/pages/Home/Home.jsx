@@ -2,7 +2,7 @@
 
 export default function Home() {
   return (
-    <div>
+    <div className="container">
       <h1>
       Site in Progress ...
       </h1>
