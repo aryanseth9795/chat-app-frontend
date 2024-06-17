@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button, Paper, TextField } from "@mui/material";
+
 import "./login.css";
 export default function Login() {
   const [log, isLog] = useState(true);
@@ -7,10 +8,12 @@ export default function Login() {
   return (
     <>
       <div className="main-container-box">
+        <img src="/client/src/assets/logo.png" / >
         {log ? (
           <>
             <h2> InstaChat</h2>
             <div className="login-container">
+    
               <Paper>
                 <TextField
                   label=" Username"
