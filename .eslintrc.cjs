@@ -19,3 +19,17 @@ module.exports = {
     ],
   },
 }
+export const getDashboardStats = TryCatch(async (req, res) => {
+  const [
+    groupsCount,
+    usersCount,
+    messagesCount,
+    totalChatsCount,
+    RequestCount,
+  ] = await Promise.all([
+    Chat.countDocuments({ groupChat: true }),
+    User.countDocuments(),
+    Message.countDocuments(),
+    Chat.countDocuments(),
+    Request.countDocuments(),
+  ])
