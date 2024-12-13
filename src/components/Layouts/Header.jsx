@@ -20,9 +20,9 @@ import {
   } from "@mui/icons-material";
   import { useNavigate } from "react-router-dom";
   import axios from "axios";
-  import { server } from "../../constants/config";
+  // import { server } from "../../constants/config";
   import toast from "react-hot-toast";
-  import { useDispatch, useSelector } from "react-redux";
+  // import { useDispatch, useSelector } from "react-redux";
 //   import { userNotExists } from "../../redux/reducers/auth";
 //   import {
 //     setIsMobile,
@@ -37,39 +37,44 @@ import {
 //   const NewGroupDialog = lazy(() => import("../specific/NewGroup"));
   
   const Header = () => {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
+    // const navigate = useNavigate();
+    // const dispatch = useDispatch();
   
     // const { isSearch, isNotification, isNewGroup } = useSelector(
     //   (state) => state.misc
     // );
     // const { notificationCount } = useSelector((state) => state.chat);
-  
+    let notificationCount=0;
+    const [search,setIsSearch]=useState({});
     // const handleMobile = () => dispatch(setIsMobile(true));
+    const handleMobile = () =>setIsMobile(true);
   
     // const openSearch = () => dispatch(setIsSearch(true));
+    const openSearch = () => setIsSearch(true);
   
-    // const openNewGroup = () => {
-    //   dispatch(setIsNewGroup(true));
-    // };
+    const openNewGroup = () => {
+      // dispatch(setIsNewGroup(true));
+      setIsNewGroup(true);
+    };
   
-    // const openNotification = () => {
-    //   dispatch(setIsNotification(true));
-    //   dispatch(resetNotificationCount());
-    // };
+    const openNotification = () => {
+      // dispatch(setIsNotification(true));
+      // dispatch(resetNotificationCount());
+      setISNotification(true);
+    };
   
     const navigateToGroup = () => navigate("/groups");
   
     const logoutHandler = async () => {
-      try {
-        const { data } = await axios.get(`${server}/api/v1/user/logout`, {
-          withCredentials: true,
-        });
-        dispatch(userNotExists());
-        toast.success(data.message);
-      } catch (error) {
-        toast.error(error?.response?.data?.message || "Something went wrong");
-      }
+      // try {
+      //   const { data } = await axios.get(`${server}/api/v1/user/logout`, {
+      //     withCredentials: true,
+      //   });
+      //   dispatch(userNotExists());
+      //   toast.success(data.message);
+      // } catch (error) {
+      //   toast.error(error?.response?.data?.message || "Something went wrong");
+      // }
     };
   
     return (
@@ -141,23 +146,23 @@ import {
           </AppBar>
         </Box>
   
-        {isSearch && (
+        {/* {isSearch && (
           <Suspense fallback={<Backdrop open />}>
             <SearchDialog />
           </Suspense>
         )}
-  
-        {isNotification && (
+   */}
+        {/* {isNotification && (
           <Suspense fallback={<Backdrop open />}>
             <NotifcationDialog />
           </Suspense>
-        )}
-  
+        )} */}
+{/*   
         {isNewGroup && (
           <Suspense fallback={<Backdrop open />}>
             <NewGroupDialog />
           </Suspense>
-        )}
+        )} */}
       </>
     );
   };
@@ -179,3 +184,7 @@ import {
   };
   
   export default Header;
+
+
+
+  

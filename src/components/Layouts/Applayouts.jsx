@@ -1,5 +1,6 @@
 import React from "react";
 import Title from "../Common/title";
+import Header from "./Header";
 import {Grid} from '@mui/material'
 const AppLayout = () =>
   (WrappedComponent) => {
@@ -7,16 +8,18 @@ const AppLayout = () =>
         return (
       <>
       <Title/>
-        <h1>Header</h1>
+        <Header/>
         <Grid container height={"calc(100vh-4rem)"}>
 
 
 
             <Grid item xs={4} height={"100%"} >1</Grid>
-            <Grid item xs={4} height={"100%"} >2</Grid>
             <Grid item xs={4} height={"100%"} >
         <WrappedComponent {...props} />
-
+              
+              </Grid>
+            <Grid item xs={4} height={"100%"} >
+3
             </Grid>
     
         </Grid>
