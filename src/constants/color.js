@@ -1,5 +1,6 @@
 // export const orange = "#ea7070";
-export const orange = "rgb(81, 245, 4)";
+export const green = "rgb(81, 245, 4)";
+export const black = "rgb(14, 15, 14)";
 export const orangeLight = "rgba(234, 112, 112,0.2)";
 
 export const grayColor = "rgba(247,247,247,1)";
