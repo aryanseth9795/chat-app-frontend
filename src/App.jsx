@@ -9,13 +9,13 @@ const Login = lazy(() => import("./pages/Login/Login"));
 const Chat = lazy(() => import("./pages/Chat/Chat"));
 const Group = lazy(() => import("./pages/Group/Group"));
 function App() {
-  let user = true;
+  let user = false;
   return (
     <>
       <Router>
         <Suspense fallback={<LayoutLoader/>}>
           <Routes>
-            <Route element={<ProtectedRoute user={user} Redirect="/login" />}>
+            <Route element={<ProtectedRoute user={user}  />}>
               {/* All Protected ROutes come under this section */}
               <Route path="/" element={<Home />} />
               <Route path="/chat:id" element={<Chat />} />
@@ -23,7 +23,7 @@ function App() {
             </Route>
             {/* // Now for login route */}
             <Route element={<ProtectedRoute user={!user} Redirect="/" />}>
-              {/* <Route path="/login" element={<Login />} /> */}
+              <Route path="/login" element={<Login />} />
             </Route>
             {/* All Unnessary Routes come under this that return invalid  */}
             <Route path="*" element={<NotFound />} />
