@@ -9,7 +9,7 @@ const Login = lazy(() => import("./pages/Login/Login"));
 const Chat = lazy(() => import("./pages/Chat/Chat"));
 const Group = lazy(() => import("./pages/Group/Group"));
 function App() {
-  let user = false;
+  let user = true;
   return (
     <>
       <Router>
@@ -19,7 +19,7 @@ function App() {
               {/* All Protected ROutes come under this section */}
               <Route path="/" element={<Home />} />
               <Route path="/chat:id" element={<Chat />} />
-              <Route path="/group" element={<Group />} />
+              <Route path="/groups" element={<Group />} />
             </Route>
             {/* // Now for login route */}
             <Route element={<ProtectedRoute user={!user} Redirect="/" />}>

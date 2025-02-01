@@ -8,4 +8,4 @@ function NotificationDialog () {
   )
 }
 
-export default NotifcationDialog 
+export default NotificationDialog ;

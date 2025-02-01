@@ -25,7 +25,7 @@ const Header = () => {
   const [isNewGroup,   setIsNewGroup] = useState(false);
   const [isNotification,  setIsNotification] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
-  let notificationCount=10;
+  let notificationCount=1;
   const handleMenuBar = () => {
     setIsMenu((prev) => !prev);
   };
@@ -76,7 +76,7 @@ const Header = () => {
               ChatsUp
             </Typography>
             <Box sx={{ flexGrow: 1 }}>   </Box>
-              <Box>
+              <Box >
                 <IconBtn
                   title={"Search"}
                   icon={<SearchIcon />}
