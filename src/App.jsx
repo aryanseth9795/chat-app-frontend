@@ -18,7 +18,7 @@ function App() {
             <Route element={<ProtectedRoute user={user}  />}>
               {/* All Protected ROutes come under this section */}
               <Route path="/" element={<Home />} />
-              <Route path="/chat:id" element={<Chat />} />
+              <Route path="/chat/:id" element={<Chat />} />
               <Route path="/groups" element={<Group />} />
             </Route>
             {/* // Now for login route */}
