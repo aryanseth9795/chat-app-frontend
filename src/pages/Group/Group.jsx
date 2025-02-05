@@ -1,7 +1,12 @@
 
+import React from 'react'
 
-export default function Group() {
+const Group = () => {
   return (
-    <div>Group</div>
+    <div>
+      
+    </div>
   )
 }
+
+export default Group

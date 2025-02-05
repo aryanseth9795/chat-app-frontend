@@ -25,6 +25,12 @@ function App() {
             <Route element={<ProtectedRoute user={!user} Redirect="/" />}>
               <Route path="/login" element={<Login />} />
             </Route>
+
+               {/* All Admin Routes Come here */}
+
+
+
+
             {/* All Unnessary Routes come under this that return invalid  */}
             <Route path="*" element={<NotFound />} />
           </Routes>

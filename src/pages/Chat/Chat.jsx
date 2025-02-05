@@ -26,13 +26,15 @@ const Chat = () => {
         boxSizing={"border-box"}
         bgcolor={grayColor}
         height={"90%"}
-        sx={{ overflowX: "hidden", overflowY: "auto" }}
+        sx={{ overflowX: "hidden", overflowY: "auto",  "&::-webkit-scrollbar": {
+          display: "none", 
+         }, }}
       >
         {/* Rendering all messages */}
 
 
         {sampleMessage.map((mes,i)=>{
-          return <MessageComponent message={mes} user={user}/>
+          return <MessageComponent message={mes} user={user} key={mes._id}/>
         })}
       </Stack>
       <form style={{ height: "10%" }}>

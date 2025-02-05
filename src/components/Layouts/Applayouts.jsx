@@ -20,7 +20,11 @@ const AppLayout = () => (WrappedComponent) => {
             sm={4}
             md={3}
             height={"100%"}
-            sx={{ display: { xs: "block", sm: "block" }
+            sx={{ display: { xs: "block", sm: "block"}, overflow:"auto",  
+              "&::-webkit-scrollbar": {
+                display: "none", 
+               },
+         
           }}
           >
             <ChatList

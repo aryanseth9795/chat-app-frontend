@@ -1,54 +1,191 @@
-export const sampledata=[{
-    avatar:["https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg"],
-    name:"Seth",
-    _id:"1",
-    groupchat:false,
-    members:["1","2"]
-},{
-    avatar:["https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
-        
+export const sampledata = [
+  {
+    avatar: [
+      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
     ],
-    name:"Aryan Seth",
-    _id:"2",
-    groupchat:false,
-    members:["1","2"]
-}];
-
-
+    name: "Seth",
+    _id: "1",
+    groupchat: false,
+    members: ["1", "2"],
+  },
+  {
+    avatar: [
+      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
+    ],
+    name: "Aryan Seth",
+    _id: "2",
+    groupchat: false,
+    members: ["1", "2"],
+  },
+  {
+    avatar: [
+      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
+    ],
+    name: "Seth",
+    _id: "1",
+    groupchat: false,
+    members: ["1", "2"],
+  },
+  {
+    avatar: [
+      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
+    ],
+    name: "Seth",
+    _id: "1",
+    groupchat: false,
+    members: ["1", "2"],
+  },
+  {
+    avatar: [
+      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
+    ],
+    name: "Seth",
+    _id: "1",
+    groupchat: false,
+    members: ["1", "2"],
+  },
+  {
+    avatar: [
+      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
+    ],
+    name: "Seth",
+    _id: "1",
+    groupchat: false,
+    members: ["1", "2"],
+  },
+  {
+    avatar: [
+      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
+    ],
+    name: "Seth",
+    _id: "1",
+    groupchat: false,
+    members: ["1", "2"],
+  },
+  {
+    avatar: [
+      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
+    ],
+    name: "Seth",
+    _id: "1",
+    groupchat: false,
+    members: ["1", "2"],
+  }, {
+    avatar: [
+      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
+    ],
+    name: "Seth",
+    _id: "1",
+    groupchat: false,
+    members: ["1", "2"],
+  }, {
+    avatar: [
+      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
+    ],
+    name: "Seth",
+    _id: "1",
+    groupchat: false,
+    members: ["1", "2"],
+  }, {
+    avatar: [
+      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
+    ],
+    name: "Seth",
+    _id: "1",
+    groupchat: false,
+    members: ["1", "2"],
+  }, {
+    avatar: [
+      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
+    ],
+    name: "Seth",
+    _id: "1",
+    groupchat: false,
+    members: ["1", "2"],
+  }, {
+    avatar: [
+      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
+    ],
+    name: "Seth",
+    _id: "1",
+    groupchat: false,
+    members: ["1", "2"],
+  }, {
+    avatar: [
+      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
+    ],
+    name: "Seth",
+    _id: "1",
+    groupchat: false,
+    members: ["1", "2"],
+  },
+];
 
 export const sampleUsers = [
-    {
+  {
+    avatar: "https://www.w3schools.com/howto/img_avatar.png",
+    name: "John Doe",
+    _id: "1",
+  },
+  {
+    avatar: "https://www.w3schools.com/howto/img_avatar.png",
+    name: "John Boi",
+    _id: "2",
+  },
+  {
+    avatar: "https://www.w3schools.com/howto/img_avatar.png",
+    name: "John Doe",
+    _id: "1",
+  },
+  {
+    avatar: "https://www.w3schools.com/howto/img_avatar.png",
+    name: "John Doe",
+    _id: "1",
+  },
+  {
+    avatar: "https://www.w3schools.com/howto/img_avatar.png",
+    name: "John Doe",
+    _id: "1",
+  },
+  {
+    avatar: "https://www.w3schools.com/howto/img_avatar.png",
+    name: "John Doe",
+    _id: "1",
+  },
+  {
+    avatar: "https://www.w3schools.com/howto/img_avatar.png",
+    name: "John Doe",
+    _id: "1",
+  },
+  {
+    avatar: "https://www.w3schools.com/howto/img_avatar.png",
+    name: "John Doe",
+    _id: "1",
+  },
+  {
+    avatar: "https://www.w3schools.com/howto/img_avatar.png",
+    name: "John Doe",
+    _id: "1",
+  },
+];
+
+export const sampleNotifications = [
+  {
+    sender: {
       avatar: "https://www.w3schools.com/howto/img_avatar.png",
       name: "John Doe",
-      _id: "1",
     },
-    {
+    _id: "1",
+  },
+  {
+    sender: {
       avatar: "https://www.w3schools.com/howto/img_avatar.png",
       name: "John Boi",
-      _id: "2",
     },
-  ];
-  
+    _id: "2",
+  },
+];
 
-  export const sampleNotifications = [
-    {
-      sender: {
-        avatar: "https://www.w3schools.com/howto/img_avatar.png",
-        name: "John Doe",
-      },
-      _id: "1",
-    },
-    {
-      sender: {
-        avatar: "https://www.w3schools.com/howto/img_avatar.png",
-        name: "John Boi",
-      },
-      _id: "2",
-    },
-  ];
-
-
-  
 export const sampleMessage = [
   {
     attachments: [],
@@ -70,10 +207,76 @@ export const sampleMessage = [
       },
     ],
     content: "xyze ertert",
-    _id: "sfnsdjkfsdnfkdddjsbnd",
+    _id: "sfnsdjkfsdnfkdddjsbndyhj",
     sender: {
       _id: "sdfsdfsdf",
       name: "abc",
+    },
+    chat: "chatId",
+    createdAt: "2024-02-12T10:41:30.630Z",
+  },
+  {
+    attachments: [],
+    content: "xyz errtgerte",
+    _id: "sfnsdjkfsdnfkjsbndo",
+    sender: {
+      _id: "1",
+      name: "Aryan",
+    },
+    chat: "chatId",
+    createdAt: "2024-02-12T10:41:30.630Z",
+  },
+  {
+    attachments: [],
+    content: "xyz errtgerte",
+    _id: "sfnsdjkfsdnfkjsbndb",
+    sender: {
+      _id: "1",
+      name: "Aryan",
+    },
+    chat: "chatId",
+    createdAt: "2024-02-12T10:41:30.630Z",
+  },
+  {
+    attachments: [],
+    content: "xyz errtgerte",
+    _id: "sfnsdjkfsdnfkjsbnds",
+    sender: {
+      _id: "1",
+      name: "Aryan",
+    },
+    chat: "chatId",
+    createdAt: "2024-02-12T10:41:30.630Z",
+  },
+  {
+    attachments: [],
+    content: "xyz errtgerte",
+    _id: "sfnsdjkfsdnfkjsbndg",
+    sender: {
+      _id: "1",
+      name: "Aryan",
+    },
+    chat: "chatId",
+    createdAt: "2024-02-12T10:41:30.630Z",
+  },
+  {
+    attachments: [],
+    content: "xyz errtgerte",
+    _id: "sfnsdjkfsdnfkjsbndgf",
+    sender: {
+      _id: "1",
+      name: "Aryan",
+    },
+    chat: "chatId",
+    createdAt: "2024-02-12T10:41:30.630Z",
+  },
+  {
+    attachments: [],
+    content: "xyz errtgerte",
+    _id: "sfnsdjkfsdnfkjsbnd",
+    sender: {
+      _id: "1",
+      name: "Aryan",
     },
     chat: "chatId",
     createdAt: "2024-02-12T10:41:30.630Z",

@@ -31,6 +31,9 @@ const NewGroupDialog = () => {
         p={{ xs: "1rem", sm: "3rem" }}
         width={{ xs: "18rem", sm: "25rem" }}
         spacing={"1rem"}
+        overflow={"auto"} sx={{  "&::-webkit-scrollbar": {
+          display: "none", 
+         },}}
       >
         <DialogTitle>New Group</DialogTitle>
         <TextField
