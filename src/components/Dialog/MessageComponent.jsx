@@ -40,7 +40,7 @@ const MessageComponent = ({ message, user }) => {
 
           return (
             <Box>
-              <a href="" target="_blank" download style={{ color: "black" }}>
+              <a href={url} target="_blank" download style={{ color: "black" }}>
                 <RenderAttachment fileformat={format} url={url} />
      
               </a>
