@@ -17,107 +17,113 @@ export const sampledata = [
     groupchat: false,
     members: ["1", "2"],
   },
+  // {
+  //   avatar: [
+  //     "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
+  //   ],
+  //   name: "Seth",
+  //   _id: "1",
+  //   groupchat: false,
+  //   members: ["1", "2"],
+  // },
+  // {
+  //   avatar: [
+  //     "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
+  //   ],
+  //   name: "Seth",
+  //   _id: "1",
+  //   groupchat: false,
+  //   members: ["1", "2"],
+  // },
+  // {
+  //   avatar: [
+  //     "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
+  //   ],
+  //   name: "Seth",
+  //   _id: "1",
+  //   groupchat: false,
+  //   members: ["1", "2"],
+  // },
+  // {
+  //   avatar: [
+  //     "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
+  //   ],
+  //   name: "Seth",
+  //   _id: "1",
+  //   groupchat: false,
+  //   members: ["1", "2"],
+  // },
+  // {
+  //   avatar: [
+  //     "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
+  //   ],
+  //   name: "Seth",
+  //   _id: "1",
+  //   groupchat: false,
+  //   members: ["1", "2"],
+  // },
+  // {
+  //   avatar: [
+  //     "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
+  //   ],
+  //   name: "Seth",
+  //   _id: "1",
+  //   groupchat: false,
+  //   members: ["1", "2"],
+  // },
   {
     avatar: [
       "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
     ],
-    name: "Seth",
-    _id: "1",
+    name: "Setweh",
+    _id: "126",
     groupchat: false,
-    members: ["1", "2"],
+    members: ["1", "298"],
   },
   {
     avatar: [
       "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
     ],
-    name: "Seth",
-    _id: "1",
+    name: "Setererh",
+    _id: "1695w4",
     groupchat: false,
-    members: ["1", "2"],
+    members: ["125", "2w"],
   },
   {
     avatar: [
       "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
     ],
-    name: "Seth",
-    _id: "1",
+    name: "Sethewrwe",
+    _id: "3451",
     groupchat: false,
-    members: ["1", "2"],
+    members: ["1", "34432"],
   },
   {
     avatar: [
       "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
     ],
-    name: "Seth",
-    _id: "1",
+    name: "mki",
+    _id: "13",
     groupchat: false,
-    members: ["1", "2"],
+    members: ["1", "25"],
   },
   {
     avatar: [
       "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
     ],
-    name: "Seth",
-    _id: "1",
+    name: "Sh",
+    _id: "10",
     groupchat: false,
-    members: ["1", "2"],
+    members: ["1", "5"],
   },
   {
     avatar: [
       "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
     ],
-    name: "Seth",
-    _id: "1",
+    name: "ayu",
+    _id: "12",
     groupchat: false,
-    members: ["1", "2"],
-  }, {
-    avatar: [
-      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
-    ],
-    name: "Seth",
-    _id: "1",
-    groupchat: false,
-    members: ["1", "2"],
-  }, {
-    avatar: [
-      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
-    ],
-    name: "Seth",
-    _id: "1",
-    groupchat: false,
-    members: ["1", "2"],
-  }, {
-    avatar: [
-      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
-    ],
-    name: "Seth",
-    _id: "1",
-    groupchat: false,
-    members: ["1", "2"],
-  }, {
-    avatar: [
-      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
-    ],
-    name: "Seth",
-    _id: "1",
-    groupchat: false,
-    members: ["1", "2"],
-  }, {
-    avatar: [
-      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
-    ],
-    name: "Seth",
-    _id: "1",
-    groupchat: false,
-    members: ["1", "2"],
-  }, {
-    avatar: [
-      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg",
-    ],
-    name: "Seth",
-    _id: "1",
-    groupchat: false,
-    members: ["1", "2"],
+    members: ["1", "15"],
   },
 ];
 

@@ -1,5 +1,5 @@
 import React from "react";
-import Title from "../Common/title";
+import Title from "../Common/Title";
 import Header from "./Header";
 import { Grid } from "@mui/material";
 import ChatList from "../Dialog/ChatList";
