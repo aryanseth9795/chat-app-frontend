@@ -25,6 +25,8 @@ import { bgGradient, matBlack } from "../../constants/color";
 import { Link } from "../../components/Styles/styledComponents";
 import { sampledata } from "../../constants/sampledata";
 import AvatarCard from "../../components/Common/AvatarCard.jsx";
+import { sampleUsers } from "../../constants/sampledata";
+import UserItem from "../../components/Common/UserItem.jsx";
 
 const Group = () => {
   const ConfirmdeleteDialog = lazy(() =>
@@ -193,11 +195,22 @@ const Group = () => {
                 maxWidth={"45rem"}
                 padding={{ xs: "0", sm: "1rem", md: "1rem 3rem " }}
                 spacing={"2rem"}
-                bgcolor={"red"}
                 overflow={"auto"}
                 height={"50vh"}
               >
-                jg
+                {sampleUsers.map((i) => (
+                  <UserItem
+                    user={i}
+                    key={i._id}
+                    isAdded
+                    styling={{
+                      boxShadow: "0 0 0.5rem  rgba(0,0,0,0.2)",
+                      padding: "0.5rem 1rem",
+                      borderRadius: "1rem",
+                    }}
+                    // handler={removeMemberHandler}
+                  />
+                ))}
                 {/* members will come here  */}
               </Stack>
               <Stack
@@ -249,7 +262,7 @@ const Group = () => {
 
       {isAdded && (
         <Suspense fallback={<Backdrop open />}>
-          <AddDialog  />
+          <AddDialog />
         </Suspense>
       )}
 

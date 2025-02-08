@@ -2,7 +2,7 @@ import { Add, Remove } from "@mui/icons-material";
 import { Avatar, IconButton, ListItem, Stack, Typography } from "@mui/material";
 import React, { memo } from "react";
 
-const UserItem = ({ user, userhandler, disablehandler = false, isAdded=false }) => {
+const UserItem = ({ user, userhandler, disablehandler = false, isAdded=false ,styling}) => {
   return (
     <ListItem>
       <Stack
@@ -23,6 +23,7 @@ const UserItem = ({ user, userhandler, disablehandler = false, isAdded=false }) 
             width: "100%",
             textOverflow: "ellipsis",
           }}
+          {...styling}
         >
           {user.name}
    
