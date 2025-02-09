@@ -3,19 +3,22 @@ import { lazy, Suspense } from "react";
 import "./App.css";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import { LayoutLoader } from "./components/Loader/Loader";
+import { useDispatch, useSelector } from "react-redux";
 const Home = lazy(() => import("./pages/Home/Home"));
 const NotFound = lazy(() => import("./pages/Not Found/NotFound"));
 const Login = lazy(() => import("./pages/Login/Login"));
 const Chat = lazy(() => import("./pages/Chat/Chat"));
 const Group = lazy(() => import("./pages/Group/Group"));
+
 function App() {
-  let user = true;
+  const { user } = useSelector((state) => state.Auth);
+
   return (
     <>
       <Router>
-        <Suspense fallback={<LayoutLoader/>}>
+        <Suspense fallback={<LayoutLoader />}>
           <Routes>
-            <Route element={<ProtectedRoute user={user}  />}>
+            <Route element={<ProtectedRoute user={user} />}>
               {/* All Protected ROutes come under this section */}
               <Route path="/" element={<Home />} />
               <Route path="/chat/:id" element={<Chat />} />
@@ -26,10 +29,7 @@ function App() {
               <Route path="/login" element={<Login />} />
             </Route>
 
-               {/* All Admin Routes Come here */}
-
-
-
+            {/* All Admin Routes Come here */}
 
             {/* All Unnessary Routes come under this that return invalid  */}
             <Route path="*" element={<NotFound />} />
