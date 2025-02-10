@@ -1,12 +1,20 @@
 import { Avatar, Stack, Typography } from "@mui/material";
 import React from "react";
-import {Face as FaceIcon,AlternateEmail as UsernameIcon,CalendarMonth} from "@mui/icons-material";
-import moment from 'moment'
+import {
+  Face as FaceIcon,
+  AlternateEmail as UsernameIcon,
+  CalendarMonth,
+} from "@mui/icons-material";
+import InfoIcon from '@mui/icons-material/Info';
+import moment from "moment";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
+  const { user } = useSelector((state) => state.Auth);
   return (
     <Stack spacing={"2rem"} alignItems={"center"}>
       <Avatar
+        src={user.avatar?.url}
         sx={{
           height: "10rem",
           width: "10rem",
@@ -14,11 +22,22 @@ const Profile = () => {
           marginBottom: "1rem",
           border: "5px solid white",
         }}
-      />   <ProfileCard heading={"Name"} text={"Aryan Seth"} Icon={<FaceIcon/>}/>
-   
-      <ProfileCard heading={"Username"} text={"aryanseth9795"} Icon={<UsernameIcon/>}  />
-      {/* <ProfileCard heading={"Bio"} text={"bhwehuihwe"} /> */}
-      <ProfileCard heading={"Joined"} text={moment('2024-06-09T00:00:00.000Z').fromNow()} Icon={<CalendarMonth/>} />
+      />
+
+      <ProfileCard heading={"Name"} text={user?.name} Icon={<FaceIcon />} />
+
+      <ProfileCard
+        heading={"Username"}
+        text={user.username}
+        Icon={<UsernameIcon />}
+      />
+
+      <ProfileCard heading={"Bio"} text={user?.bio? user?.bio:"Like to add Something about yourself ? "} Icon={<InfoIcon/>} />
+      <ProfileCard
+        heading={"Joined"}
+        text={moment(user.createdAt).fromNow()}
+        Icon={<CalendarMonth />}
+      />
     </Stack>
   );
 };
@@ -33,7 +52,7 @@ const ProfileCard = ({ text, Icon, heading }) => (
   >
     {Icon && Icon}
     <Stack>
-      <Typography variant="body">{text}</Typography>
+      <Typography variant="body2">{text}</Typography>
       <Typography color={"grey"} variant="caption">
         {heading}
       </Typography>

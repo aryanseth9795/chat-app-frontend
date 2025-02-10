@@ -1,19 +1,25 @@
-import React, { useState } from "react";
+import { useFileHandler, useInputValidation } from "6pp";
+import { CameraAlt } from "@mui/icons-material";
 import {
+  Avatar,
+  Button,
   Container,
+  IconButton,
   Paper,
+  Stack,
   TextField,
   Typography,
-  Button,
-  Stack,
-  IconButton,
-  Avatar,
 } from "@mui/material";
-import { CameraAlt } from "@mui/icons-material";
+import axios from "axios";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 import { VisuallyHiddenInput } from "../../components/Styles/styledComponents";
+import serverUrl from "../../constants/config";
+import { userexist, userNotexist } from "../../redux/slices/AuthSlice";
 import { usernameValidation } from "../../utils/validation";
-import { useFileHandler, useInputValidation } from "6pp";
 const Login = () => {
+  const dispatch = useDispatch();
   const [islogin, setislogin] = useState(true);
 
   // defining state variables of the form
@@ -23,14 +29,61 @@ const Login = () => {
   const username = useInputValidation("", usernameValidation);
   const email = useInputValidation();
   const avatar = useFileHandler("single");
- const handlelogin=(e)=>{
-  e.preventDefault();
-  console.log("clicked")
- };
- const handlesignup=(e)=>{
-  e.preventDefault();
-  console.log("clicked")
- };
+  const handlelogin = async (e) => {
+    e.preventDefault();
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      };
+
+      const res = await axios.post(
+        `${serverUrl}/users/login`,
+        { username: username.value, password: password.value },
+        config
+      );
+      dispatch(userexist(res?.data?.success));
+      toast.success(res?.data?.message);
+    } catch (error) {
+      dispatch(userNotexist());
+      toast.error(error?.data?.message);
+    }
+  };
+  const handlesignup = async (e) => {
+    e.preventDefault();
+
+    try {
+      const formData = new FormData();
+      formData.append("name", name.value);
+      formData.append("username", username.value);
+      formData.append("password", password.value);
+      formData.append("email", email.value);
+
+      // If avatar is uploaded
+      if (avatar.file) {
+        formData.append("avatar", avatar.file);
+      }
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      };
+
+      const res = await axios.post(
+        `${serverUrl}/users/signup`,
+        formData,
+        config
+      );
+      dispatch(userexist(res?.data?.success));
+      toast.success(res?.data?.message);
+    } catch (error) {
+      dispatch(userNotexist());
+      toast.error(error?.data?.message);
+    }
+  };
   return (
     <div
       style={{
@@ -70,7 +123,10 @@ const Login = () => {
                 ChatsApp
               </Typography>
               <Typography variant="h5"> Login </Typography>
-              <form style={{ width: "100%", marginTop: "1rem" }} onSubmit={handlelogin}>
+              <form
+                style={{ width: "100%", marginTop: "1rem" }}
+                onSubmit={handlelogin}
+              >
                 <TextField
                   required
                   fullWidth
@@ -131,7 +187,10 @@ const Login = () => {
                 {" "}
                 SignUp{" "}
               </Typography>
-              <form onSubmit={handlesignup} style={{ width: "100%", marginTop: "0.5rem" }}>
+              <form
+                onSubmit={handlesignup}
+                style={{ width: "100%", marginTop: "0.5rem" }}
+              >
                 <Stack position={"relative"} width={"5rem"} margin={"auto"}>
                   <Avatar
                     src={avatar.preview}
@@ -161,7 +220,13 @@ const Login = () => {
                   </IconButton>
                 </Stack>
                 {avatar.error && (
-                  <Typography m={"1rem auto"} width={"fit-content"} display={"block"} variant="caption" color="error">
+                  <Typography
+                    m={"1rem auto"}
+                    width={"fit-content"}
+                    display={"block"}
+                    variant="caption"
+                    color="error"
+                  >
                     {avatar.error}
                   </Typography>
                 )}
@@ -201,7 +266,7 @@ const Login = () => {
                   required
                   fullWidth
                   label="Password"
-                   type="password"
+                  type="password"
                   margin="normal"
                   variant="standard"
                   value={password.value}

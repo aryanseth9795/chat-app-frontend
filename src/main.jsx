@@ -4,6 +4,7 @@ import { CssBaseline } from "@mui/material";
 import { Provider } from "react-redux";
 import { HelmetProvider } from "react-helmet-async";
 import Store from './redux/store.js'
+import {Toaster} from 'react-hot-toast'
 ReactDOM.createRoot(document.getElementById("root")).render(
   <>
     <Provider store={Store}>
@@ -11,6 +12,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <CssBaseline />
         <div onContextMenu={(e) => e.preventDefault()}>
           <App />
+          <Toaster position="bottom-center"/>
         </div>
       </HelmetProvider>
     </Provider>
