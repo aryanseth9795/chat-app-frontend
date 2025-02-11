@@ -20,7 +20,7 @@ function App() {
   const token = document.cookie.includes("token"); 
   useEffect(() => {
 
-    console.log(token)
+   
     // Check if token exists in cookies
   
     if (token) {
@@ -40,23 +40,7 @@ function App() {
       fetchfunc();
     }
   }, [dispatch,token]);
-  // useEffect(() => {
-   
-  //   const fetchfunc = async () => {
-  //     try {
-  //       const userdetail = await axios.get(`${serverUrl}/users/me`, {
-  //         withCredentials: true,
-  //       });
-     
-  //       dispatch(userexist(userdetail?.data?.user));
-  //     } catch (error) {
-  //       dispatch(userNotexist());
-  //       toast.error(error?.response?.data?.message);
-  //     }
-  //   };
-  //   fetchfunc();
  
-  // }, [dispatch]);
 
   return (
     <>
