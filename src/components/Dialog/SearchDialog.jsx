@@ -7,32 +7,58 @@ import {
   ListItem,
   TextField,
   List,
-  Stack
+  Stack,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UserItem from "../Common/UserItem";
-import { sampleUsers } from "../../constants/sampledata";
+
 import { setIsSearch } from "../../redux/slices/MiscSlice";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  useFriendRequestSendMutation,
+  useLazySearchUserQuery,
+} from "../../redux/api/api";
+import { useInputValidation } from "6pp";
+import toast from "react-hot-toast";
+import { useAsyncMutation } from "../../hooks/customHooks";
 
 function SearchDialog() {
-  const dispatch=useDispatch()
-  const [users,setUsers] = useState(sampleUsers);
-  const {isSearch } = useSelector((state) => state.Misc);
-  const userhandler = ({ _id }) => {
-    console.log(_id);
+  const dispatch = useDispatch();
+  const [users, setUsers] = useState([]);
+  const { isSearch } = useSelector((state) => state.Misc);
+  const [searchUser] = useLazySearchUserQuery();
+  const search = useInputValidation("");
+
+  const [friendRequestSend, isLoadingfriendRequest] = useAsyncMutation(
+    useFriendRequestSendMutation
+  );
+
+  const userhandler = async (_id) => {
+   await friendRequestSend("friend Request Sending",{userId:_id})
   };
 
-  const closehandler=()=>{
-    dispatch(setIsSearch(false))
-  }
+  const closehandler = () => {
+    dispatch(setIsSearch(false));
+  };
   let disablehandler = false;
+
+  useEffect(() => {
+    const timeId = setTimeout(() => {
+      searchUser(search.value).then((data) => setUsers(data?.data?.users));
+      console.log(search.value);
+    }, 500);
+
+    return () => clearTimeout(timeId);
+  }, [search.value]);
 
   return (
     <Dialog open={isSearch} onClose={closehandler}>
       <Stack p={"2rem"} direction={"column"} width={"25rem"}>
         <DialogTitle alignItems={"center"}> Find People </DialogTitle>
         <TextField
+          onChange={search.changeHandler}
+          value={search.value}
+          label={"Search Username or Name"}
           variant="outlined"
           size="small"
           inputProps={{
@@ -43,14 +69,14 @@ function SearchDialog() {
             ),
           }}
         />
+
         <List>
           {users.map((user) => (
-            <ListItem>
+            <ListItem key={user?.id}>
               <UserItem
                 user={user}
-                key={user._id}
                 userhandler={userhandler}
-                disablehandler={disablehandler}
+                disablehandler={isLoadingfriendRequest}
               />
             </ListItem>
           ))}

@@ -88,7 +88,9 @@ const Header = () => {
     );
   };
   return (
-    <>
+  <Suspense fallback={<Backdrop open />}>
+
+<>
       <Box sx={{ flexGrow: 1 }} height={"4rem"}>
         <AppBar position="static" sx={{ bgcolor: green }}>
           <Toolbar>
@@ -161,6 +163,7 @@ const Header = () => {
         </Suspense>
       )}
     </>
+  </Suspense>
   );
 };
 
