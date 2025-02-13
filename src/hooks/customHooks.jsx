@@ -6,7 +6,7 @@ export const useError = (errors = []) => {
     errors.forEach(({ error, isError, fallback }) => {
       if (isError) {
         if (fallback) fallback();
-        toast.error(error || "Something get Wrong !");
+       else toast.error(error?.data?.message || "Something get Wrong !");
       }
     });
   }, [errors]);

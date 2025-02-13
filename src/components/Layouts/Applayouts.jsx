@@ -16,7 +16,7 @@ const AppLayout = () => (WrappedComponent) => {
     const { isMobile } = useSelector((state) => state.Misc);
 
     const { data, error, isError, isLoading } = useMychatListQuery();
-    console.log(data);
+    
 
     useError([{isError,error}]);
 
@@ -24,7 +24,7 @@ const AppLayout = () => (WrappedComponent) => {
       e.preventDeafult();
     };
     const drawerClose = () => {
-      console.log("clicked");
+
       dispatch(setIsMenu(false));
     };
     return (

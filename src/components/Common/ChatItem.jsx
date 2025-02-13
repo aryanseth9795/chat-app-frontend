@@ -6,6 +6,7 @@ import AvatarCard from "./AvatarCard";
 const ChatItem = ({
   avatar = [],
   name,
+  username,
   _id,
   groupchat = false,
   sameSender,
@@ -37,6 +38,7 @@ const ChatItem = ({
         <AvatarCard avatar={avatar} />
         <Stack>
           <Typography>{name}</Typography>
+          <Typography variant="caption">{username}</Typography>
           {newMessageAlerts && (
             <Typography variant="caption" color={"#e53935"}>
               {newMessageAlerts.count} New Message

@@ -23,17 +23,19 @@ const NotificationDialog = () => {
   const dispatch = useDispatch();
   const { isNotification } = useSelector((state) => state.Misc);
   const [acceptRequest] = useFriendRequestAcceptorMutation();
-  const friendRequestHandler = async ({ id, accept }) => {
-    console.log("clicked")
+  const friendRequestHandler = async ({ _id, accept }) => {
+  
     try {
-      const res = await acceptRequest({ requestId: id, accept });
-      console.log(res)
+      const res = await acceptRequest({ requestId: _id, accept });
+      console.log(res);
       if (res?.data?.success) {
         // socket used
-        toast.success(res?.data?.error);
-      }else{
-        toast.error(res?.data?.message);
-
+        toast.success(res?.data?.message);
+        
+        dispatch(setIsNotification(false));
+      } else {
+        toast.error(res?.data?.error);
+        dispatch(setIsNotification(false));
       }
     } catch (error) {}
     // toast.error(res?.data?.message);
