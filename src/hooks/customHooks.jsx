@@ -15,7 +15,7 @@ export const useError = (errors = []) => {
 export const useAsyncMutation = (mutationhook) => {
   const [isLoading, setIsloading] = useState(false);
   const [data, setData] = useState(null);
-  
+
   const [mutate] = mutationhook();
   const execution = async (toastMessage, ...args) => {
     setIsloading(true);
@@ -33,7 +33,6 @@ export const useAsyncMutation = (mutationhook) => {
         });
       }
     } catch (error) {
-      
       toast.error(error, { id: toastId });
     } finally {
       setIsloading(false);

@@ -4,30 +4,51 @@ import serverUrl from "../../constants/config";
 export const apiSlice = createApi({
   reducerPath: "Api",
   baseQuery: fetchBaseQuery({ baseUrl: `${serverUrl}` }),
-  tagTypes: ["Chats","User"],
+  tagTypes: ["Chats", "User"],
   endpoints: (builder) => ({
     mychatList: builder.query({
       query: () => ({ url: "/chats/mychats", credentials: "include" }),
-      providesTags: ["chats"],
+      providesTags: ["Chats"],
     }),
     searchUser: builder.query({
       query: (name) => ({
         url: `/users/search?name=${name}`,
         credentials: "include",
       }),
-      providesTags:["User"]
+      providesTags: ["User"],
     }),
-    friendRequestSend:builder.mutation({
-      query:(data)=>({
-        url:"/users/sendrequest",
-        credentials:"include",
+    friendRequestSend: builder.mutation({
+      query: (data) => ({
+        url: "/users/sendrequest",
+        credentials: "include",
+        method: "Put",
+        body: data,
+      }),
+      invalidatesTags: ["User"],
+    }),
+    getNotification: builder.query({
+      query: () => ({
+        url: `/users/getnotification`,
+        credentials: "include",
+      }),
+      keepUnusedDataFor: 0,
+    }),
+    friendRequestAcceptor: builder.mutation({
+      query: (data) => ({
+        url: "/users/acceptrequest",
+        credentials: "include",
         method:"Put",
         body:data
       }),
-      invalidatesTags:["User"]
-    })
+      invalidatesTags:["Chats"]
+    }),
   }),
 });
 
 // Export hooks for usage in components
-export const { useMychatListQuery,useLazySearchUserQuery,useFriendRequestSendMutation } = apiSlice;
+export const {
+  useMychatListQuery,
+  useLazySearchUserQuery,
+  useFriendRequestSendMutation,
+  useGetNotificationQuery,useFriendRequestAcceptorMutation
+} = apiSlice;

@@ -5,22 +5,56 @@ import {
   Stack,
   ListItem,
   Avatar,
-  Button
+  Button,
+  Skeleton,
 } from "@mui/material";
 import React, { memo, useState } from "react";
-import { sampleNotifications } from "../../constants/sampledata";
+
+import {
+  useFriendRequestAcceptorMutation,
+  useGetNotificationQuery,
+} from "../../redux/api/api";
+import { useError } from "../../hooks/customHooks";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsNotification } from "../../redux/slices/MiscSlice";
+import toast from "react-hot-toast";
 
 const NotificationDialog = () => {
-  const friendRequestHandler = () => {};
-  const [NotificationList, setnotify] = useState(sampleNotifications);
+  const dispatch = useDispatch();
+  const { isNotification } = useSelector((state) => state.Misc);
+  const [acceptRequest] = useFriendRequestAcceptorMutation();
+  const friendRequestHandler = async ({ id, accept }) => {
+    console.log("clicked")
+    try {
+      const res = await acceptRequest({ requestId: id, accept });
+      console.log(res)
+      if (res?.data?.success) {
+        // socket used
+        toast.success(res?.data?.error);
+      }else{
+        toast.error(res?.data?.message);
+
+      }
+    } catch (error) {}
+    // toast.error(res?.data?.message);
+  };
+
+  const NotificationdialogClose = () => {
+    dispatch(setIsNotification(false));
+  };
+  const { isLoading, data, isError, error } = useGetNotificationQuery();
+  useError([{ isError, error }]);
+  console.log(data);
 
   return (
-    <Dialog open>
+    <Dialog open={isNotification} onClose={NotificationdialogClose}>
       <Stack p={{ x: "1rem", sm: "2rem" }} maxwidth={"25rem"}>
         <DialogTitle>Notifications</DialogTitle>
-        {NotificationList.length > 0 ? (
+        {isLoading ? (
+          <Skeleton />
+        ) : data?.allRequests?.length > 0 ? (
           <>
-            {NotificationList.map((i) => (
+            {data?.allRequests.map((i) => (
               <NotificationItem
                 notification={i}
                 key={i._id}
@@ -41,7 +75,7 @@ const NotificationDialog = () => {
 };
 
 const NotificationItem = memo(({ notification, handler }) => {
-  const { sender, _id } = notification;
+  const { _id, sender } = notification;
 
   return (
     <>
@@ -52,7 +86,7 @@ const NotificationItem = memo(({ notification, handler }) => {
           spacing={"1rem"}
           width={"100%"}
         >
-          <Avatar src={sender.avatar} />
+          <Avatar src={sender?.avatar?.url} alt={sender?.avatar?.public_id} />
           <Typography
             variant="body1"
             sx={{
@@ -65,11 +99,19 @@ const NotificationItem = memo(({ notification, handler }) => {
               textOverflow: "ellipsis",
             }}
           >
-            {`${sender.name} sent you a friend request`}
+            {`${sender?.name} sent you a friend request`}
           </Typography>
           <Stack>
-            <Button onClick={()=>handler({_id,accept:true})}>Accept</Button>
-            <Button color={"error"} onClick={()=>handler({_id,accept:false})}> Reject</Button>
+            <Button onClick={() => handler({ _id, accept: true })}>
+              Accept
+            </Button>
+            <Button
+              color={"error"}
+              onClick={() => handler({ _id, accept: false })}
+            >
+              {" "}
+              Reject
+            </Button>
           </Stack>
         </Stack>
       </ListItem>
@@ -77,4 +119,4 @@ const NotificationItem = memo(({ notification, handler }) => {
   );
 });
 
-export default NotificationDialog ;
+export default NotificationDialog;

@@ -29,27 +29,27 @@ function SearchDialog() {
   const [searchUser] = useLazySearchUserQuery();
   const search = useInputValidation("");
 
-  const [friendRequestSend, isLoadingfriendRequest] = useAsyncMutation(
+  const [friendRequestSend, isLoadingfriendRequest,data] = useAsyncMutation(
     useFriendRequestSendMutation
   );
 
   const userhandler = async (_id) => {
-   await friendRequestSend("friend Request Sending",{userId:_id})
+   await friendRequestSend("friend Request Sending",{userId:_id});
+
   };
 
   const closehandler = () => {
     dispatch(setIsSearch(false));
   };
-  let disablehandler = false;
+
 
   useEffect(() => {
     const timeId = setTimeout(() => {
-      searchUser(search.value).then((data) => setUsers(data?.data?.users));
-      console.log(search.value);
+      searchUser(search.value).then((data) => setUsers(data?.data?.users)).catch((e)=>console.log(e));
     }, 500);
 
     return () => clearTimeout(timeId);
-  }, [search.value]);
+  }, [search.value,data]);
 
   return (
     <Dialog open={isSearch} onClose={closehandler}>
@@ -71,12 +71,13 @@ function SearchDialog() {
         />
 
         <List>
-          {users.map((user) => (
-            <ListItem key={user?.id}>
+          {users && users.map((user) => (
+            <ListItem key={user?._id}>
               <UserItem
                 user={user}
                 userhandler={userhandler}
                 disablehandler={isLoadingfriendRequest}
+               isAdded={user.request}
               />
             </ListItem>
           ))}

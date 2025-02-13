@@ -1,10 +1,15 @@
 import { Add, Remove } from "@mui/icons-material";
 import { Avatar, IconButton, ListItem, Stack, Typography } from "@mui/material";
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { TransformImage } from "../../lib/feature";
 
-const UserItem = ({ user, userhandler, disablehandler = false, isAdded=false ,styling}) => {
-
+const UserItem = ({
+  user,
+  userhandler,
+  disablehandler = false,
+  isAdded = false,
+  styling,
+}) => {
   return (
     <ListItem>
       <Stack
@@ -14,8 +19,7 @@ const UserItem = ({ user, userhandler, disablehandler = false, isAdded=false ,st
         width={"100%"}
       >
         <Avatar src={TransformImage(user.avatar)} />
-        <Typography
-          variant="body1"
+        <Stack
           sx={{
             flexGrow: "1",
             display: "webkit-box",
@@ -27,16 +31,20 @@ const UserItem = ({ user, userhandler, disablehandler = false, isAdded=false ,st
           }}
           {...styling}
         >
-          {user.name}
-   
-        </Typography>
+          <Typography variant="body1" {...styling}>
+            {user.name}
+          </Typography>
+          <Typography variant="caption" {...styling}>
+            {user.username}
+          </Typography>
+        </Stack>
         <IconButton
           onClick={() => userhandler(user._id)}
           disabled={disablehandler}
           sx={{
             bgcolor: isAdded ? "error.main" : "primary.main",
             color: "white",
-            "&hover": { bgcolor: isAdded ?"error":"primary.dark" },
+            "&hover": { bgcolor: isAdded ? "error" : "primary.dark" },
           }}
         >
           {isAdded ? <Remove /> : <Add />}

@@ -47,8 +47,11 @@ const Login = () => {
       dispatch(userexist(res?.data?.success));
       toast.success(res?.data?.message);
     } catch (error) {
+ 
       dispatch(userNotexist());
-      toast.error(error?.data?.message);
+      toast.error(error?.
+        response
+        ?.data?.message || "Something went Wrong");
     }
   };
   const handlesignup = async (e) => {
