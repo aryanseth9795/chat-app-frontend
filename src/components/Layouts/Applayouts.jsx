@@ -93,7 +93,7 @@ const AppLayout = () => (WrappedComponent) => {
           </Grid>
         </Grid>
 
-        <Drawer open={isMobile} onClose={drawerClose}>
+        <Drawer open={isMobile} onClose={drawerClose} w={"70vw"}>
         {isLoading ? (
               <Skeleton />
             ) : (

@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { VisuallyHiddenInput } from "../../components/Styles/styledComponents";
@@ -29,6 +29,14 @@ const Login = () => {
   const username = useInputValidation("", usernameValidation);
   const email = useInputValidation();
   const avatar = useFileHandler("single");
+
+  useEffect(() => {
+    if (avatar?.error) {
+      toast.error(avatar.error);
+      avatar?.clear();
+    }
+  }, [avatar]);
+
   const handlelogin = async (e) => {
     e.preventDefault();
     try {
@@ -47,11 +55,8 @@ const Login = () => {
       dispatch(userexist(res?.data?.success));
       toast.success(res?.data?.message);
     } catch (error) {
- 
       dispatch(userNotexist());
-      toast.error(error?.
-        response
-        ?.data?.message || "Something went Wrong");
+      toast.error(error?.response?.data?.message || "Something went Wrong");
     }
   };
   const handlesignup = async (e) => {
@@ -64,7 +69,6 @@ const Login = () => {
       formData.append("password", password.value);
       formData.append("email", email.value);
 
-      // If avatar is uploaded
       if (avatar.file) {
         formData.append("avatar", avatar.file);
       }
@@ -231,6 +235,7 @@ const Login = () => {
                     color="error"
                   >
                     {avatar.error}
+                    {/* { avatar.clear()} */}
                   </Typography>
                 )}
                 <TextField
