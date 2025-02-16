@@ -10,7 +10,7 @@ export const SocketProvider = ({ children }) => {
       () => io(`${server}`, { withCredentials: true }),
       []
     );
-    console.log(socket)
+    // console.log(socket,"in provider")
     return (
         <socketContext.Provider value={socket}>{children}</socketContext.Provider>
     );

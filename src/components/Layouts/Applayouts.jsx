@@ -10,13 +10,17 @@ import { setIsMenu } from "../../redux/slices/MiscSlice.js";
 import { useMychatListQuery } from "../../redux/api/api.js";
 import { useError } from "../../hooks/customHooks.jsx";
 import { getSocket } from "../../socket.jsx";
+import { useParams } from "react-router-dom";
 
 const AppLayout = () => (WrappedComponent) => {
   return (props) => {
     const dispatch = useDispatch();
+    const param=useParams();
+    // console.log(param,"params")
     const { isMobile } = useSelector((state) => state.Misc);
-   const socket=getSocket();
-   console.log(socket.id)
+    const { user } = useSelector((state) => state.Auth);
+   
+
     const { data, error, isError, isLoading } = useMychatListQuery();
 
     useError([{ isError, error }]);
@@ -75,7 +79,7 @@ const AppLayout = () => (WrappedComponent) => {
             height={{ xs: "92%", sm: "100%" }}
             sx={{ display: { xs: "block", sm: "block" }, overflow: "hidden" }}
           >
-            <WrappedComponent {...props} />
+            <WrappedComponent {...props} chatId={param.id} user={user}/>
           </Grid>
 
           <Grid

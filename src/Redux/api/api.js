@@ -37,10 +37,21 @@ export const apiSlice = createApi({
       query: (data) => ({
         url: "/users/acceptrequest",
         credentials: "include",
-        method:"Put",
-        body:data
+        method: "Put",
+        body: data,
       }),
-      invalidatesTags:["Chats"]
+      invalidatesTags: ["Chats"],
+    }),
+    chatDetails: builder.query({
+      query: ({ chatId, populate=false }) => {
+        let url = `/chats/${chatId}`;
+        if (populate) {
+          url += url + `?populate=true`;
+        }
+        return { url, credentials: "include" };
+      },
+      providesTags: ["Chats"],
+      //
     }),
   }),
 });
@@ -50,5 +61,7 @@ export const {
   useMychatListQuery,
   useLazySearchUserQuery,
   useFriendRequestSendMutation,
-  useGetNotificationQuery,useFriendRequestAcceptorMutation
+  useGetNotificationQuery,
+  useFriendRequestAcceptorMutation,
+  useChatDetailsQuery
 } = apiSlice;

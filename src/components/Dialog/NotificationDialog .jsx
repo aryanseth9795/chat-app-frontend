@@ -38,7 +38,7 @@ const NotificationDialog = () => {
         dispatch(setIsNotification(false));
       }
     } catch (error) {}
-    // toast.error(res?.data?.message);
+    toast.error(error?.data?.message);
   };
 
   const NotificationdialogClose = () => {
