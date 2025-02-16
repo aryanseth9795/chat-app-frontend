@@ -25,7 +25,11 @@ import serverUrl from "../../constants/config";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { userNotexist } from "../../redux/slices/AuthSlice";
-import { setIsMenu,setIsNotification,setIsSearch } from "../../redux/slices/MiscSlice";
+import {
+  setIsMenu,
+  setIsNotification,
+  setIsSearch,
+} from "../../redux/slices/MiscSlice";
 
 //calling lazy components
 const NewGroupDialog = lazy(() => import("../Dialog/NewGroupDialog"));
@@ -35,8 +39,10 @@ const SearchDialog = lazy(() => import("../Dialog/SearchDialog"));
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isMobile,isSearch,isNotification } = useSelector((state) => state.Misc);
-  
+  const { isMobile, isSearch, isNotification } = useSelector(
+    (state) => state.Misc
+  );
+
   // const [isMobile, setIsMobile] = useState(true);
   const [isNewGroup, setIsNewGroup] = useState(false);
   // const [isNotification, setIsNotification] = useState(false);
@@ -45,11 +51,11 @@ const Header = () => {
   const handleMenuBar = () => {
     dispatch(setIsMenu(true));
   };
-  
+
   const openSearch = () => {
-    console.log("dis1")
-    dispatch(setIsSearch(true))
-    console.log("dis2")
+    
+    dispatch(setIsSearch(true));
+   
   };
 
   const openNewGroup = () => {
@@ -88,82 +94,80 @@ const Header = () => {
     );
   };
   return (
-  <Suspense fallback={<Backdrop open />}>
+    <Suspense fallback={<Backdrop open />}>
+      <>
+        <Box sx={{ flexGrow: 1 }} height={"4rem"}>
+          <AppBar position="static" sx={{ bgcolor: green }}>
+            <Toolbar>
+              <Box sx={{ display: { sx: "block", sm: "none" } }}>
+                <IconButton color="inherit" onClick={handleMenuBar}>
+                  <Menu />
+                </IconButton>
+              </Box>
 
-<>
-      <Box sx={{ flexGrow: 1 }} height={"4rem"}>
-        <AppBar position="static" sx={{ bgcolor: green }}>
-          <Toolbar>
-            <Box sx={{ display: { sx: "block", sm: "none" } }}>
-              <IconButton color="inherit" onClick={handleMenuBar}>
-                <Menu />
-              </IconButton>
-            </Box>
+              <Typography
+                sx={{ color: black, typography: { xs: "body1", sm: "h4" } }}
+                p={"1rem"}
+                justifyContent={"center"}
+              >
+                ChatsUp
+              </Typography>
+              <Box sx={{ flexGrow: 1 }}> </Box>
+              <Box>
+                <IconBtn
+                  title={"Search"}
+                  icon={<SearchIcon />}
+                  onClick={openSearch}
+                />
 
-            <Typography
-              variant={{xs:"body",sm:"h4"}}
-              sx={{ color: black }}
-              p={"1rem"}
-              justifyContent={"center"}
-            >
-              ChatsUp
-            </Typography>
-            <Box sx={{ flexGrow: 1 }}> </Box>
-            <Box>
-              <IconBtn
-                title={"Search"}
-                icon={<SearchIcon />}
-                onClick={openSearch}
-              />
+                <IconBtn
+                  title={"New Group"}
+                  icon={<AddIcon />}
+                  onClick={openNewGroup}
+                />
 
-              <IconBtn
-                title={"New Group"}
-                icon={<AddIcon />}
-                onClick={openNewGroup}
-              />
+                <IconBtn
+                  title={"Manage Groups"}
+                  icon={<GroupIcon />}
+                  onClick={navigateToGroup}
+                />
 
-              <IconBtn
-                title={"Manage Groups"}
-                icon={<GroupIcon />}
-                onClick={navigateToGroup}
-              />
+                <IconBtn
+                  title={"Notifications"}
+                  icon={<NotificationsIcon />}
+                  onClick={openNotification}
+                  value={notificationCount}
+                />
 
-              <IconBtn
-                title={"Notifications"}
-                icon={<NotificationsIcon />}
-                onClick={openNotification}
-                value={notificationCount}
-              />
+                <IconBtn
+                  title={"Logout"}
+                  icon={<LogoutIcon />}
+                  onClick={logoutHandler}
+                />
+              </Box>
+            </Toolbar>
+          </AppBar>
+        </Box>
 
-              <IconBtn
-                title={"Logout"}
-                icon={<LogoutIcon />}
-                onClick={logoutHandler}
-              />
-            </Box>
-          </Toolbar>
-        </AppBar>
-      </Box>
+        {isSearch && (
+          <Suspense fallback={<Backdrop open />}>
+            <SearchDialog />
+          </Suspense>
+        )}
 
-      {isSearch && (
-        <Suspense fallback={<Backdrop open />}>
-          <SearchDialog />
-        </Suspense>
-      )}
+        {isNotification && (
+          <Suspense fallback={<Backdrop open />}>
+            <NotificationDialog />
+          </Suspense>
+        )}
 
-      {isNotification && (
-        <Suspense fallback={<Backdrop open />}>
-          <NotificationDialog />
-        </Suspense>
-      )}
-
-      {isNewGroup && (
-        <Suspense fallback={<Backdrop open />}>
-          <NewGroupDialog />
-        </Suspense>
-      )}
-    </>
-  </Suspense>
+        {isNewGroup && (
+          <Suspense fallback={<Backdrop open />}>
+            <NewGroupDialog />
+          </Suspense>
+        )}
+      </>
+    </Suspense>
   );
 };
 

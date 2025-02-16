@@ -8,6 +8,7 @@ import { userexist, userNotexist } from "./redux/slices/AuthSlice";
 import serverUrl from "./constants/config";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { SocketProvider } from "./socket";
 const Home = lazy(() => import("./pages/Home/Home"));
 const NotFound = lazy(() => import("./pages/Not Found/NotFound"));
 const Login = lazy(() => import("./pages/Login/Login"));
@@ -17,37 +18,40 @@ const Group = lazy(() => import("./pages/Group/Group"));
 function App() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.Auth);
-  const token = document.cookie.includes("token"); 
+  const token = document.cookie.includes("token");
   useEffect(() => {
-
-   
     // Check if token exists in cookies
-  
+
     if (token) {
       const fetchfunc = async () => {
         try {
           const userdetail = await axios.get(`${serverUrl}/users/me`, {
             withCredentials: true,
           });
-  
+
           dispatch(userexist(userdetail?.data?.user));
         } catch (error) {
           dispatch(userNotexist());
           toast.error(error?.response?.data?.message);
         }
       };
-  
+
       fetchfunc();
     }
-  }, [dispatch,token]);
- 
+  }, [dispatch, token]);
 
   return (
     <>
       <Router>
         <Suspense fallback={<LayoutLoader />}>
           <Routes>
-            <Route element={<ProtectedRoute user={user} />}>
+            <Route
+              element={
+                <SocketProvider>
+                  <ProtectedRoute user={user} />
+                </SocketProvider>
+              }
+            >
               {/* All Protected ROutes come under this section */}
               <Route path="/" element={<Home />} />
               <Route path="/chat/:id" element={<Chat />} />

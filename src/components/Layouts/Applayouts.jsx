@@ -9,22 +9,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { setIsMenu } from "../../redux/slices/MiscSlice.js";
 import { useMychatListQuery } from "../../redux/api/api.js";
 import { useError } from "../../hooks/customHooks.jsx";
+import { getSocket } from "../../socket.jsx";
 
 const AppLayout = () => (WrappedComponent) => {
   return (props) => {
     const dispatch = useDispatch();
     const { isMobile } = useSelector((state) => state.Misc);
-
+   const socket=getSocket();
+   console.log(socket.id)
     const { data, error, isError, isLoading } = useMychatListQuery();
-    
 
-    useError([{isError,error}]);
+    useError([{ isError, error }]);
 
     const handleDeleteChat = (e) => {
       e.preventDeafult();
     };
     const drawerClose = () => {
-
       dispatch(setIsMenu(false));
     };
     return (
@@ -94,26 +94,26 @@ const AppLayout = () => (WrappedComponent) => {
         </Grid>
 
         <Drawer open={isMobile} onClose={drawerClose} w={"70vw"}>
-        {isLoading ? (
-              <Skeleton />
-            ) : (
-              <ChatList
-                chats={data?.chats}
-                chatId={"1"}
-                onlineusers={["1", "2"]}
-                handleDeleteChat={handleDeleteChat}
-                newMessageAlert={[
-                  {
-                    chatId: "1",
-                    count: 15,
-                  },
-                  {
-                    chatId: "2",
-                    count: 15,
-                  },
-                ]}
-              />
-            )}
+          {isLoading ? (
+            <Skeleton />
+          ) : (
+            <ChatList
+              chats={data?.chats}
+              chatId={"1"}
+              onlineusers={["1", "2"]}
+              handleDeleteChat={handleDeleteChat}
+              newMessageAlert={[
+                {
+                  chatId: "1",
+                  count: 15,
+                },
+                {
+                  chatId: "2",
+                  count: 15,
+                },
+              ]}
+            />
+          )}
         </Drawer>
       </>
     );
