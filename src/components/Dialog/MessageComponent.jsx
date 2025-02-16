@@ -5,6 +5,7 @@ import moment from "moment";
 import { fileFormat } from "../../lib/feature";
 import RenderAttachment from "../Common/RenderAttachment";
 const MessageComponent = ({ message, user }) => {
+  console.log("message at ",message);
   const { sender, content, attachments = [], createdAt } = message;
 
   const samesender = sender?._id === user?._id;
@@ -28,10 +29,10 @@ const MessageComponent = ({ message, user }) => {
         fontWeight={"600"}
         alignSelf={samesender ? "flex-end" : "flex-start"}
       >
-        {samesender ? "You" : sender.name}
+        {samesender ? "You" : sender?.name}
       </Typography>
 
-      {content && <Typography>{content}</Typography>}
+      { <Typography>{content}</Typography>}
 
       {attachments.length > 0 &&
         attachments.map((attachment, i) => {

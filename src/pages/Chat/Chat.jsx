@@ -1,4 +1,4 @@
-import React, { useRef, useState,useMemo } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import AppLayout from "../../components/Layouts/Applayouts";
 import { IconButton, Skeleton, Stack } from "@mui/material";
 import { grayColor, green } from "../../constants/color";
@@ -11,32 +11,37 @@ import MessageComponent from "../../components/Dialog/MessageComponent";
 import { getSocket } from "../../socket";
 import { NEW_MESSAGE } from "../../constants/event";
 import { useChatDetailsQuery } from "../../redux/api/api";
+import { useError, useSocketEventHook } from "../../hooks/customHooks";
 
-
-const Chat = ({ chatId ,user }) => {
-
+const Chat = ({ chatId, user }) => {
   const containerref = useRef(null);
   const [message, setMessage] = useState();
   const [messages, setMessages] = useState([]);
   const socket = getSocket();
-  // console.log(chatId)
 
-  const chatDetails=useChatDetailsQuery({chatId, skip:!chatId});
-  // const chatDetails = useMemo(() => useChatDetailsQuery({ chatId, skip: !chatId }), [chatId]);
+  const chatDetails = useChatDetailsQuery({ chatId, skip: !chatId });
+  useError([{ isError: chatDetails?.isError, error: chatDetails?.error }]);
 
-  // console.log(res)
-  const members=chatDetails?.data?.chat?.members;
-  // console.log(members)
+  const members = chatDetails?.data?.chat?.members;
+
   const messageSendHandle = (e) => {
     e.preventDefault();
-    if(!message.trim()) return
-    socket.emit(NEW_MESSAGE,{chatId,members,message})
-    setMessage("")
-    // console.log(message);
+    if (!message.trim()) return;
+    socket.emit(NEW_MESSAGE, { chatId, members, message });
+
+    setMessage("");
   };
 
-  socket.on(NEW_MESSAGE,(data)=>{console.log(data)})
-  return chatDetails?.isLoading?<Skeleton/>:
+  const newMessageHandler = useCallback((data) => {
+    // console.log(data);
+    setMessages((prev) => [...prev, data.message]);
+  }, []);
+  const EventsObject = { [NEW_MESSAGE]: newMessageHandler };
+  useSocketEventHook(socket, EventsObject);
+
+  return chatDetails?.isLoading ? (
+    <Skeleton />
+  ) : (
     <>
       <Stack
         padding={"1rem"}
@@ -55,9 +60,10 @@ const Chat = ({ chatId ,user }) => {
       >
         {/* Rendering all messages */}
 
-        {sampleMessage.map((mes, i) => {
-          return <MessageComponent message={mes} user={user} key={mes._id} />;
-        })}
+        {messages &&
+          messages.map((mes, i) => {
+            return <MessageComponent message={mes} user={user} key={mes._id} />;
+          })}
       </Stack>
       <form style={{ height: "10%" }} onSubmit={messageSendHandle}>
         <Stack
@@ -97,7 +103,7 @@ const Chat = ({ chatId ,user }) => {
 
       <FileMenu />
     </>
-  
+  );
 };
 
 export default AppLayout()(Chat);

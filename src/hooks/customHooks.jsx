@@ -6,7 +6,7 @@ export const useError = (errors = []) => {
     errors.forEach(({ error, isError, fallback }) => {
       if (isError) {
         if (fallback) fallback();
-       else toast.error(error?.data?.message || "Something get Wrong !");
+        else toast.error(error?.data?.message || "Something get Wrong !");
       }
     });
   }, [errors]);
@@ -39,4 +39,17 @@ export const useAsyncMutation = (mutationhook) => {
     }
   };
   return [execution, isLoading, data];
+};
+
+export const useSocketEventHook = (socket, handlers) => {
+  useEffect(() => {
+    Object.entries(handlers).forEach(([event, handler]) => {
+      socket.on(event, handler);
+    });
+    return () => {
+      Object.entries(handlers).forEach(([event, handler]) => {
+        socket.off(event, handler);
+      });
+    };
+  }, [socket, handlers]);
 };
