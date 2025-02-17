@@ -2,7 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isMobile: false,
   isSearch:false,
-  isNotification:false
+  isNotification:false,
+  isFileMenu:false,
+  isFileLoading:false,
 };
 
 const MiscSlice = createSlice({
@@ -18,7 +20,13 @@ const MiscSlice = createSlice({
     setIsNotification: (state, action) => {
       state.isNotification = action.payload;
     },
+    setIsFileMenu: (state, action) => {
+      state.isFileMenu = action.payload;
+    },
+    setIsFileLoading: (state, action) => {
+      state.isFileLoading = action.payload;
+    },
   },
 });
-export const { setIsMenu ,setIsSearch,setIsNotification} = MiscSlice.actions;
+export const { setIsMenu ,setIsSearch,setIsNotification,setIsFileMenu, setIsFileLoading} = MiscSlice.actions;
 export default MiscSlice;

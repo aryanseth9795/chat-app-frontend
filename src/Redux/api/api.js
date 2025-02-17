@@ -4,7 +4,7 @@ import serverUrl from "../../constants/config";
 export const apiSlice = createApi({
   reducerPath: "Api",
   baseQuery: fetchBaseQuery({ baseUrl: `${serverUrl}` }),
-  tagTypes: ["Chats", "User"],
+  tagTypes: ["Chats", "User", "Messages"],
   endpoints: (builder) => ({
     mychatList: builder.query({
       query: () => ({ url: "/chats/mychats", credentials: "include" }),
@@ -43,7 +43,7 @@ export const apiSlice = createApi({
       invalidatesTags: ["Chats"],
     }),
     chatDetails: builder.query({
-      query: ({ chatId, populate=false }) => {
+      query: ({ chatId, populate = false }) => {
         let url = `/chats/${chatId}`;
         if (populate) {
           url += url + `?populate=true`;
@@ -52,6 +52,23 @@ export const apiSlice = createApi({
       },
       providesTags: ["Chats"],
       //
+    }),
+    getMessages: builder.query({
+      query: ({ chatId, page }) => ({
+        url: `/chats/message/${chatId}?page=${page}`,
+        credentials: "include",
+      }),
+      providesTags: ["Messages"],
+    }),
+
+    sendattachements: builder.mutation({
+      query: (files) => ({
+        url: "/chats/message/attachment",
+        body: files,
+        method: "Post",
+        credentials: "include",
+      }),
+      keepUnusedDataFor: 0,
     }),
   }),
 });
@@ -63,5 +80,7 @@ export const {
   useFriendRequestSendMutation,
   useGetNotificationQuery,
   useFriendRequestAcceptorMutation,
-  useChatDetailsQuery
+  useChatDetailsQuery,
+  useGetMessagesQuery,
+  useSendattachementsMutation
 } = apiSlice;
