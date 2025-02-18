@@ -58,7 +58,8 @@ export const apiSlice = createApi({
         url: `/chats/message/${chatId}?page=${page}`,
         credentials: "include",
       }),
-      providesTags: ["Messages"],
+
+      keepUnusedDataFor: 0,
     }),
 
     sendattachements: builder.mutation({
@@ -66,6 +67,16 @@ export const apiSlice = createApi({
         url: "/chats/message/attachment",
         body: files,
         method: "Post",
+        credentials: "include",
+      }),
+      keepUnusedDataFor: 0,
+    }),
+
+    updateProfile: builder.mutation({
+      query: (data) => ({
+        url: "/users/update",
+        method: "Put",
+        body: data,
         credentials: "include",
       }),
       keepUnusedDataFor: 0,
@@ -82,5 +93,6 @@ export const {
   useFriendRequestAcceptorMutation,
   useChatDetailsQuery,
   useGetMessagesQuery,
-  useSendattachementsMutation
+  useSendattachementsMutation,
+  useUpdateProfileMutation
 } = apiSlice;

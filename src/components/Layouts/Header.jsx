@@ -39,14 +39,13 @@ const SearchDialog = lazy(() => import("../Dialog/SearchDialog"));
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isMobile, isSearch, isNotification } = useSelector(
+  const {  isSearch, isNotification } = useSelector(
     (state) => state.Misc
   );
 
-  // const [isMobile, setIsMobile] = useState(true);
+
   const [isNewGroup, setIsNewGroup] = useState(false);
-  // const [isNotification, setIsNotification] = useState(false);
-  // const [isSearch, setIsSearch] = useState(false);
+
   let notificationCount = 1;
   const handleMenuBar = () => {
     dispatch(setIsMenu(true));

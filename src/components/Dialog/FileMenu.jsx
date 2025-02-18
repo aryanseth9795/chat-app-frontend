@@ -1,28 +1,27 @@
 import {
-  ListItemText,
-  Menu,
-  MenuList,
-  Stack,
-  IconButton,
-  MenuItem,
-  Tooltip,
-} from "@mui/material";
-import React, { useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { setIsFileLoading, setIsFileMenu } from "../../redux/slices/MiscSlice";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
-import toast from "react-hot-toast";
-import {
+  AudioFile as AudioIcon,
   Image,
   VideoCameraBack as VideoIcon,
-  AudioFile as AudioIcon,
 } from "@mui/icons-material";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import {
+  ListItemText,
+  Menu,
+  MenuItem,
+  MenuList,
+  Tooltip
+} from "@mui/material";
+import React, { useRef } from "react";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 import { useSendattachementsMutation } from "../../redux/api/api";
+import { setIsFileLoading, setIsFileMenu } from "../../redux/slices/MiscSlice";
 const FileMenu = ({ anchorE1, chatId }) => {
   const dispatch = useDispatch();
   const [fileUplaoder] = useSendattachementsMutation();
-  // creating references for all the input fields
 
+
+  // creating references for all the input fields
   const imgRef = useRef(null);
   const videoRef = useRef(null);
   const audioRef = useRef(null);

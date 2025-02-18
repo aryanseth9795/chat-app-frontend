@@ -1,27 +1,26 @@
-import React, { useRef, useState, useCallback, useEffect } from "react";
-import AppLayout from "../../components/Layouts/Applayouts";
-import { IconButton, Skeleton, Stack } from "@mui/material";
-import { grayColor, green } from "../../constants/color";
+import { useInfiniteScrollTop } from "6pp";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import SendIcon from "@mui/icons-material/Send";
-import { InputBox } from "../../components/Styles/styledComponents";
-import FileMenu from "../../components/Dialog/FileMenu";
-import { sampleMessage } from "../../constants/sampledata";
-import MessageComponent from "../../components/Dialog/MessageComponent";
-import { getSocket } from "../../socket";
-import { NEW_MESSAGE } from "../../constants/event";
-import { useChatDetailsQuery, useGetMessagesQuery } from "../../redux/api/api";
-import { useError, useSocketEventHook } from "../../hooks/customHooks";
-import { useInfiniteScrollTop } from "6pp";
+import { IconButton, Skeleton, Stack } from "@mui/material";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
+import FileMenu from "../../components/Dialog/FileMenu";
+import MessageComponent from "../../components/Dialog/MessageComponent";
+import AppLayout from "../../components/Layouts/Applayouts";
+import { InputBox } from "../../components/Styles/styledComponents";
+import { grayColor, green } from "../../constants/color";
+import { NEW_MESSAGE } from "../../constants/event";
+import { useError, useSocketEventHook } from "../../hooks/customHooks";
+import { useChatDetailsQuery, useGetMessagesQuery } from "../../redux/api/api";
 import { setIsFileMenu } from "../../redux/slices/MiscSlice";
+import { getSocket } from "../../socket";
 
 const Chat = ({ chatId, user }) => {
   const containerref = useRef(null);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [allMessages, setallMessages] = useState([]);
-  const [page, setPages] = useState(2);
+  const [page, setPages] = useState(1);
   const [anchorfile, setanchorfile] = useState(null);
 
   const dispatch = useDispatch();
@@ -37,9 +36,9 @@ const Chat = ({ chatId, user }) => {
   const chatDetails = useChatDetailsQuery({ chatId, skip: !chatId });
 
   // fetching messages chunk
-
   const oldMessageChunks = useGetMessagesQuery({ chatId, page });
 
+  // setting up infinite scroll
   const { data, setData } = useInfiniteScrollTop(
     containerref,
     oldMessageChunks?.data?.totalpages,
@@ -47,7 +46,7 @@ const Chat = ({ chatId, user }) => {
     setPages,
     oldMessageChunks?.data?.messages
   );
-  // console.log(data);
+ 
 
   // handling all error
   useError([
@@ -81,25 +80,20 @@ const Chat = ({ chatId, user }) => {
 
     setallMessages([...data, ...messages]);
     console.log("All messages", allMessages);
-
-    return () => {
-      console.log("unmounting");
-
-      setallMessages([]);
-    };
   }, [data, messages]);
 
   useEffect(() => {
     return () => {
       console.log("unmounting");
-      setMessage([]);
+      setMessage("");
       setData([]);
       setallMessages([]);
       setPages(1);
-      setMessage("");
+      setMessages([]);
+      console.log("unmounted");
     };
   }, [chatId]);
-  // console.log(allMessages);
+  
 
   return chatDetails?.isLoading ? (
     <Skeleton />
@@ -120,18 +114,14 @@ const Chat = ({ chatId, user }) => {
           },
         }}
       >
-        {/* rendering new messages */}
+        
+        {/* Rendering all messages */}
 
         {allMessages &&
           allMessages.map((mes, i) => {
             return <MessageComponent message={mes} user={user} key={mes._id} />;
           })}
-        {/* Rendering all messages */}
 
-        {/* {messages &&
-          messages.map((mes, i) => {
-            return <MessageComponent message={mes} user={user} key={mes._id} />;
-          })} */}
       </Stack>
       <form style={{ height: "10%" }} onSubmit={messageSendHandle}>
         <Stack

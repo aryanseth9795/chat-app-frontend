@@ -15,7 +15,7 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { VisuallyHiddenInput } from "../../components/Styles/styledComponents";
-import serverUrl from "../../constants/config";
+import serverUrl, { server } from "../../constants/config";
 import { userexist, userNotexist } from "../../redux/slices/AuthSlice";
 import { usernameValidation } from "../../utils/validation";
 const Login = () => {
@@ -29,6 +29,25 @@ const Login = () => {
   const username = useInputValidation("", usernameValidation);
   const email = useInputValidation();
   const avatar = useFileHandler("single");
+
+  const isServerOnline = async () => {
+    const checkId = toast.loading(
+      "Checking Server Status, Please Wait for a moment"
+    );
+    try {
+      console.log("Checking Server Status");  
+      const resp=await axios.get(server);
+      if(resp) toast.success("Server is Online ! Go Ahead", { id: checkId });
+    } catch (error) {
+     
+      toast.error("Server is Down ! Please wait a moment", { id: checkId });
+      toast.success("Trying to reconnect to server...");
+      await axios.get(server);
+    }
+  };
+  useEffect(() => {
+    isServerOnline();
+  }, []);
 
   useEffect(() => {
     if (avatar?.error) {
