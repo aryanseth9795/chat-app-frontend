@@ -7,10 +7,10 @@ const socketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
   const socket = useMemo(
-      () => io(`${server}`, { withCredentials: true }),
+      () => io(`${server}`, { withCredentials: true,  }),
       []
     );
-    // console.log(socket,"in provider")
+   
     return (
         <socketContext.Provider value={socket}>{children}</socketContext.Provider>
     );

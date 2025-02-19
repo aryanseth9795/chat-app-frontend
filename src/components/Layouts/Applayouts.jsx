@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import Title from "../Common/Title";
 import Header from "./Header";
 import { Grid, Drawer, Skeleton } from "@mui/material";
@@ -8,18 +8,22 @@ import Profile from "../Common/Profile.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsMenu } from "../../redux/slices/MiscSlice.js";
 import { useMychatListQuery } from "../../redux/api/api.js";
-import { useError } from "../../hooks/customHooks.jsx";
+import { useError, useSocketEventHook } from "../../hooks/customHooks.jsx";
 import { getSocket } from "../../socket.jsx";
 import { useParams } from "react-router-dom";
+import {
+  NEW_NOTIFICATION_ALERT,
+  NEW_MESSAGE_ALERT,
+} from "../../constants/event.js";
+import { NotificationCountIncrement } from "../../redux/slices/ChatSlice.js";
 
 const AppLayout = () => (WrappedComponent) => {
   return (props) => {
     const dispatch = useDispatch();
-    const param=useParams();
+    const param = useParams();
     // console.log(param,"params")
     const { isMobile } = useSelector((state) => state.Misc);
     const { user } = useSelector((state) => state.Auth);
-   
 
     const { data, error, isError, isLoading } = useMychatListQuery();
 
@@ -31,6 +35,18 @@ const AppLayout = () => (WrappedComponent) => {
     const drawerClose = () => {
       dispatch(setIsMenu(false));
     };
+
+    const socket = getSocket();
+    const newMessageAlert = useCallback(() => {}, []);
+    const newnotificationAlert = useCallback(() => {
+      dispatch(NotificationCountIncrement());
+    }, []);
+    const socketEvents = [
+      { [NEW_MESSAGE_ALERT]: newMessageAlert },
+      { [NEW_NOTIFICATION_ALERT]: newnotificationAlert },
+    ];
+    useSocketEventHook(socket, socketEvents);
+
     return (
       <>
         <Title />
@@ -79,7 +95,7 @@ const AppLayout = () => (WrappedComponent) => {
             height={{ xs: "92%", sm: "100%" }}
             sx={{ display: { xs: "block", sm: "block" }, overflow: "hidden" }}
           >
-            <WrappedComponent {...props} chatId={param.id} user={user}/>
+            <WrappedComponent {...props} chatId={param.id} user={user} />
           </Grid>
 
           <Grid

@@ -42,11 +42,13 @@ const Header = () => {
   const {  isSearch, isNotification } = useSelector(
     (state) => state.Misc
   );
-
+  const {  notificationCount } = useSelector(
+    (state) => state.Chat
+  );
 
   const [isNewGroup, setIsNewGroup] = useState(false);
 
-  let notificationCount = 1;
+  // let notificationCount = 1;
   const handleMenuBar = () => {
     dispatch(setIsMenu(true));
   };
