@@ -1,14 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
 const initialState = {
   NotificationCount: 0,
 };
-
 const ChatSlice = createSlice({
   name: "Chat",
   initialState,
   reducers: {
-    NotificationCount: (state, action) => {
+    setNotificationCount: (state, action) => {
       state.NotificationCount = action.payload;
     },
 
@@ -22,7 +22,7 @@ const ChatSlice = createSlice({
 });
 
 export const {
-  NotificationCount,
+  setNotificationCount,
   NotificationCountIncrement,
   NotificationReset,
 } = ChatSlice.actions;

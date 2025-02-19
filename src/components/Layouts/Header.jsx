@@ -30,6 +30,8 @@ import {
   setIsNotification,
   setIsSearch,
 } from "../../redux/slices/MiscSlice";
+import { getSocket } from "../../socket";
+import {  NotificationReset } from "../../redux/slices/ChatSlice";
 
 //calling lazy components
 const NewGroupDialog = lazy(() => import("../Dialog/NewGroupDialog"));
@@ -39,24 +41,18 @@ const SearchDialog = lazy(() => import("../Dialog/SearchDialog"));
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {  isSearch, isNotification } = useSelector(
-    (state) => state.Misc
-  );
-  const {  notificationCount } = useSelector(
-    (state) => state.Chat
-  );
+  const { isSearch, isNotification } = useSelector((state) => state.Misc);
+  const { NotificationCount } = useSelector((state) => state.Chat);
 
   const [isNewGroup, setIsNewGroup] = useState(false);
-
-  // let notificationCount = 1;
+const socket=getSocket();
+ 
   const handleMenuBar = () => {
     dispatch(setIsMenu(true));
   };
 
   const openSearch = () => {
-    
     dispatch(setIsSearch(true));
-   
   };
 
   const openNewGroup = () => {
@@ -64,6 +60,7 @@ const Header = () => {
   };
   const openNotification = () => {
     dispatch(setIsNotification(true));
+    dispatch(NotificationReset());
   };
   const navigateToGroup = () => {
     navigate("/groups");
@@ -73,6 +70,11 @@ const Header = () => {
       const res = await axios.get(`${serverUrl}/users/logout`, {
         withCredentials: true,
       });
+      if (res) {
+        console.log(res)
+        socket.disconnect();
+      
+      }
       dispatch(userNotexist());
       toast.success(res?.data?.message);
     } catch (error) {
@@ -137,7 +139,7 @@ const Header = () => {
                   title={"Notifications"}
                   icon={<NotificationsIcon />}
                   onClick={openNotification}
-                  value={notificationCount}
+                  value={NotificationCount}
                 />
 
                 <IconBtn

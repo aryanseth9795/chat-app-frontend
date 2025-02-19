@@ -37,14 +37,17 @@ const AppLayout = () => (WrappedComponent) => {
     };
 
     const socket = getSocket();
+    console.log(socket);
     const newMessageAlert = useCallback(() => {}, []);
     const newnotificationAlert = useCallback(() => {
+   
       dispatch(NotificationCountIncrement());
     }, []);
-    const socketEvents = [
-      { [NEW_MESSAGE_ALERT]: newMessageAlert },
-      { [NEW_NOTIFICATION_ALERT]: newnotificationAlert },
-    ];
+    const socketEvents = {
+      [NEW_MESSAGE_ALERT]: newMessageAlert,
+      [NEW_NOTIFICATION_ALERT]: newnotificationAlert,
+    };
+
     useSocketEventHook(socket, socketEvents);
 
     return (

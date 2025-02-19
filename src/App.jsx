@@ -9,6 +9,7 @@ import serverUrl from "./constants/config";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { SocketProvider } from "./socket";
+import {  setNotificationCount } from "./redux/slices/ChatSlice";
 const Home = lazy(() => import("./pages/Home/Home"));
 const NotFound = lazy(() => import("./pages/Not Found/NotFound"));
 const Login = lazy(() => import("./pages/Login/Login"));
@@ -30,6 +31,8 @@ function App() {
           });
 
           dispatch(userexist(userdetail?.data?.user));
+          // console.log(userdetail?.data?.user?.notificationCount)
+          dispatch(setNotificationCount(userdetail?.data?.user?.notificationCount))   
         } catch (error) {
           dispatch(userNotexist());
           toast.error(error?.response?.data?.message);

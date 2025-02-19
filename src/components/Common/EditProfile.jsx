@@ -23,7 +23,7 @@ const EditProfile = ({ isEdit, setIsEdit }) => {
   const { user } = useSelector((state) => state.Auth);
 
   const dispatch = useDispatch();
-  console.log(user);
+  
 
   // defining the input fields
   const name = useInputValidation(user?.name);
@@ -37,8 +37,8 @@ const EditProfile = ({ isEdit, setIsEdit }) => {
       const updatetoastid = toast.loading("Updating Profile...");
       const newFormUpdate = new FormData();
 
-      if (name.value !== user.name) newFormUpdate.append("name", name.value);
-      if (username.value !== user.username)
+      if (name?.value !== user?.name) newFormUpdate.append("name", name?.value);
+      if (username?.value !== user?.username)
         newFormUpdate.append("username", username.value);
       if (avatar.file) newFormUpdate.append("avatar", avatar.file);
       if (bio.value !== user.bio) newFormUpdate.append("bio", bio.value);
@@ -46,18 +46,16 @@ const EditProfile = ({ isEdit, setIsEdit }) => {
       const res = await updateProfile(newFormUpdate);
 
       if (res?.data) {
-        toast.success(res.data.message, { id: updatetoastid });
-        dispatch(userexist(res.data.newUser));
+        toast.success(res?.data?.message, { id: updatetoastid });
+        dispatch(userexist(res?.data?.newUser));
       } else {
         console.error(res?.error?.data?.message);
         toast.error(res?.error?.data?.message, { id: updatetoastid });
       }
     } catch (error) {
-      toast.error(error.data.message, { id: updatetoastid });
+      toast.error(error?.data.message, { id: updatetoastid });
     } finally {
       setIsEdit(false);
-
-      avatar.clear();
     }
   };
   return (
@@ -135,12 +133,12 @@ const EditProfile = ({ isEdit, setIsEdit }) => {
           )}
 
           <TextField
-            required
+           
             fullWidth
             label="Bio"
             margin="normal"
             variant="standard"
-            value={bio.value}
+            value={bio?.value}
             onChange={bio.changeHandler}
           />
 
