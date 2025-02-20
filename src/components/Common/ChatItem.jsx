@@ -15,6 +15,9 @@ const ChatItem = ({
   index = 0,
   handleDeleteChat,
 }) => {
+
+
+
   return (
     <Link
       sx={{ padding: "0" }}
@@ -41,7 +44,7 @@ const ChatItem = ({
           <Typography variant="caption">{username}</Typography>
           {newMessageAlerts && (
             <Typography variant="caption" color={"#e53935"}>
-              {newMessageAlerts.count} New Message
+              {newMessageAlerts.alertCount} New Message
             </Typography>
           )}
         </Stack>

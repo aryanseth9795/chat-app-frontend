@@ -31,7 +31,6 @@ function App() {
           });
 
           dispatch(userexist(userdetail?.data?.user));
-          // console.log(userdetail?.data?.user?.notificationCount)
           dispatch(setNotificationCount(userdetail?.data?.user?.notificationCount))   
         } catch (error) {
           dispatch(userNotexist());

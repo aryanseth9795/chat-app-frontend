@@ -15,15 +15,20 @@ import {
   NEW_NOTIFICATION_ALERT,
   NEW_MESSAGE_ALERT,
 } from "../../constants/event.js";
-import { NotificationCountIncrement } from "../../redux/slices/ChatSlice.js";
+import {
+  NotificationCountIncrement,
+  setChatAlert,
+} from "../../redux/slices/ChatSlice.js";
 
 const AppLayout = () => (WrappedComponent) => {
   return (props) => {
     const dispatch = useDispatch();
     const param = useParams();
-    // console.log(param,"params")
+    // console.log(param.id)
+    const chatId = param?.id;
     const { isMobile } = useSelector((state) => state.Misc);
     const { user } = useSelector((state) => state.Auth);
+    const { chatAlert } = useSelector((state) => state.Chat);
 
     const { data, error, isError, isLoading } = useMychatListQuery();
 
@@ -37,10 +42,12 @@ const AppLayout = () => (WrappedComponent) => {
     };
 
     const socket = getSocket();
-    console.log(socket);
-    const newMessageAlert = useCallback(() => {}, []);
+    // console.log(socket);
+    const newMessageAlert = useCallback((data) => {
+      if (chatId === data?.chatId) return;
+      dispatch(setChatAlert(data));
+    }, [chatId]);
     const newnotificationAlert = useCallback(() => {
-   
       dispatch(NotificationCountIncrement());
     }, []);
     const socketEvents = {
@@ -73,19 +80,10 @@ const AppLayout = () => (WrappedComponent) => {
             ) : (
               <ChatList
                 chats={data?.chats}
-                chatId={"1"}
+                chatId={param.id}
                 onlineusers={["1", "2"]}
                 handleDeleteChat={handleDeleteChat}
-                newMessageAlert={[
-                  {
-                    chatId: "1",
-                    count: 15,
-                  },
-                  {
-                    chatId: "2",
-                    count: 15,
-                  },
-                ]}
+                newMessageAlert={chatAlert}
               />
             )}
           </Grid>
@@ -98,7 +96,7 @@ const AppLayout = () => (WrappedComponent) => {
             height={{ xs: "92%", sm: "100%" }}
             sx={{ display: { xs: "block", sm: "block" }, overflow: "hidden" }}
           >
-            <WrappedComponent {...props} chatId={param.id} user={user} />
+            <WrappedComponent {...props} chatId={chatId} user={user} />
           </Grid>
 
           <Grid
@@ -122,19 +120,10 @@ const AppLayout = () => (WrappedComponent) => {
           ) : (
             <ChatList
               chats={data?.chats}
-              chatId={"1"}
+              chatId={param.id}
               onlineusers={["1", "2"]}
               handleDeleteChat={handleDeleteChat}
-              newMessageAlert={[
-                {
-                  chatId: "1",
-                  count: 15,
-                },
-                {
-                  chatId: "2",
-                  count: 15,
-                },
-              ]}
+              newMessageAlert={chatAlert}
             />
           )}
         </Drawer>
