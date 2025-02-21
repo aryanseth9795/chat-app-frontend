@@ -39,7 +39,6 @@ const Login = () => {
       const resp=await axios.get(server);
       if(resp) toast.success("Server is Online ! Go Ahead", { id: checkId });
     } catch (error) {
-     
       toast.error("Server is Down ! Please wait a moment", { id: checkId });
       toast.success("Trying to reconnect to server...");
       await axios.get(server);

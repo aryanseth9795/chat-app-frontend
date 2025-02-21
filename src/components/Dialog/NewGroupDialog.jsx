@@ -1,39 +1,52 @@
+import { useInputValidation } from "6pp";
 import {
+  Button,
   Dialog,
   DialogTitle,
-  Typography,
-  Stack,
   ListItem,
-  Avatar,
-  Button,
+  Stack,
   TextField,
+  Typography
 } from "@mui/material";
-import React, { memo, useState } from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { sampleUsers } from "../../constants/sampledata";
+import { setIsNewGroup } from "../../redux/slices/MiscSlice";
 import UserItem from "../Common/UserItem";
-import { useInputValidation } from "6pp";
 
 const NewGroupDialog = () => {
-
+  const dispatch = useDispatch();
+  const { isNewGroup } = useSelector((state) => state.Misc);
+  console.log(isNewGroup);
   const [members, setMembers] = useState(sampleUsers);
   const [selectedMembers, setSelectedMembers] = useState([]);
 
   const groupName = useInputValidation("");
   const memberhandler = (id) => {
-
-    setSelectedMembers((prev)=>  prev.includes(id) ? prev.filter((current)=>current!==id) : [...prev,id] );}
+    setSelectedMembers((prev) =>
+      prev.includes(id)
+        ? prev.filter((current) => current !== id)
+        : [...prev, id]
+    );
+  };
 
   const submitHandler = () => {};
-  const closeHandler = () => {};
+  const closeHandler = () => {
+    dispatch(setIsNewGroup(false));
+  };
+  
   return (
-    <Dialog open onClose={closeHandler}>
+    <Dialog open={isNewGroup} onClose={closeHandler}>
       <Stack
         p={{ xs: "1rem", sm: "3rem" }}
         width={{ xs: "18rem", sm: "25rem" }}
         spacing={"1rem"}
-        overflow={"auto"} sx={{  "&::-webkit-scrollbar": {
-          display: "none", 
-         },}}
+        overflow={"auto"}
+        sx={{
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+        }}
       >
         <DialogTitle>New Group</DialogTitle>
         <TextField
@@ -45,7 +58,12 @@ const NewGroupDialog = () => {
         <Stack>
           {members.map((user) => (
             <ListItem>
-              <UserItem user={user} key={user._id} userhandler={memberhandler} isAdded={selectedMembers.includes(user._id)}  />
+              <UserItem
+                user={user}
+                key={user._id}
+                userhandler={memberhandler}
+                isAdded={selectedMembers.includes(user._id)}
+              />
             </ListItem>
           ))}
         </Stack>

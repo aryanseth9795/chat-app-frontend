@@ -27,6 +27,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { userNotexist } from "../../redux/slices/AuthSlice";
 import {
   setIsMenu,
+  setIsNewGroup,
   setIsNotification,
   setIsSearch,
 } from "../../redux/slices/MiscSlice";
@@ -41,10 +42,10 @@ const SearchDialog = lazy(() => import("../Dialog/SearchDialog"));
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isSearch, isNotification } = useSelector((state) => state.Misc);
+  const { isSearch, isNotification,isNewGroup } = useSelector((state) => state.Misc);
   const { NotificationCount } = useSelector((state) => state.Chat);
 
-  const [isNewGroup, setIsNewGroup] = useState(false);
+
 const socket=getSocket();
  
   const handleMenuBar = () => {
@@ -56,7 +57,7 @@ const socket=getSocket();
   };
 
   const openNewGroup = () => {
-    setIsNewGroup((prev) => !prev);
+    dispatch(setIsNewGroup(true))
   };
   const openNotification = () => {
     dispatch(setIsNotification(true));
