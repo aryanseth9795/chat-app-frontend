@@ -4,21 +4,43 @@ import {
   Dialog,
   DialogTitle,
   ListItem,
+  Skeleton,
   Stack,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { sampleUsers } from "../../constants/sampledata";
 import { setIsNewGroup } from "../../redux/slices/MiscSlice";
 import UserItem from "../Common/UserItem";
+import toast from "react-hot-toast";
+import {
+  useCreategroupMutation,
+  useGetMembersforAddinGroupsQuery,
+} from "../../redux/api/api";
+import { useError } from "../../hooks/customHooks";
 
 const NewGroupDialog = () => {
   const dispatch = useDispatch();
   const { isNewGroup } = useSelector((state) => state.Misc);
-  console.log(isNewGroup);
-  const [members, setMembers] = useState(sampleUsers);
+
+  const { data, isLoading, isError, error } =
+    useGetMembersforAddinGroupsQuery();
+
+  useError([{ isError, error }]);
+
+  // group craeting api
+
+  const [createGroup] = useCreategroupMutation();
+
+  let members = data?.users?.map(({ _id, name, avatar }) => ({
+    _id,
+    name,
+    avatar: avatar.url,
+  }));
+
+
   const [selectedMembers, setSelectedMembers] = useState([]);
 
   const groupName = useInputValidation("");
@@ -30,11 +52,36 @@ const NewGroupDialog = () => {
     );
   };
 
-  const submitHandler = () => {};
+  const submitHandler = async () => {
+    if (groupName.value === "") {
+      toast.error("Enter Group Name");
+      return;
+    }
+
+    const tid = toast.loading("Creating Group");
+    let body = { name: groupName.value, members: selectedMembers };
+
+    try {
+      const data = await createGroup(body);
+      if (data?.data?.success) {
+        toast.success(data.data.message, { id: tid });
+      }
+
+      if (data.error) {
+        toast.error(data.error.message, { id: tid });
+      }
+    } catch (error) {
+      toast.error(error || "Something went Wrong", { id: tid });
+    } finally {
+      dispatch(setIsNewGroup(false));
+      setSelectedMembers([]);
+      groupName.clear();
+    }
+  };
   const closeHandler = () => {
     dispatch(setIsNewGroup(false));
   };
-  
+
   return (
     <Dialog open={isNewGroup} onClose={closeHandler}>
       <Stack
@@ -53,11 +100,12 @@ const NewGroupDialog = () => {
           value={groupName.value}
           onChange={groupName.changeHandler}
           label={"Group Name"}
+          required
         />
         <Typography p={"0 0 0 3rem "}>Members</Typography>
         <Stack>
-          {members.map((user) => (
-            <ListItem>
+         {isLoading ? <Skeleton/>:  members?.map((user) => (
+            <ListItem key={user._id}>
               <UserItem
                 user={user}
                 key={user._id}

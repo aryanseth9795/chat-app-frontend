@@ -10,6 +10,7 @@ import {
   TextField,
   Button,
   Backdrop,
+  Skeleton,
 } from "@mui/material";
 import { green } from "../../constants/color";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
@@ -27,6 +28,9 @@ import { sampledata } from "../../constants/sampledata";
 import AvatarCard from "../../components/Common/AvatarCard.jsx";
 import { sampleUsers } from "../../constants/sampledata";
 import UserItem from "../../components/Common/UserItem.jsx";
+import { useGroupDetailsQuery, useMyGroupsQuery } from "../../redux/api/api.js";
+import { useError } from "../../hooks/customHooks.jsx";
+import { LoaderIcon } from "react-hot-toast";
 
 const Group = () => {
   const ConfirmdeleteDialog = lazy(() =>
@@ -35,7 +39,26 @@ const Group = () => {
   const AddDialog = lazy(() => import("../../components/Dialog/AddDialog.jsx"));
   let isAdded = false;
   const navigate = useNavigate();
+
+  // fetching group chat
+
   const chatId = useSearchParams()[0].get("group");
+  const { data: groupchatList, isLoading, error, isError } = useMyGroupsQuery();
+
+  const {
+    data: grpdetails,
+    isLoading: groupdetailLoading,
+    isError: detailError,
+    error: detailErrorValue,
+  } = useGroupDetailsQuery(chatId, { skip: !chatId });
+
+  useError([
+    { isError, error },
+    { detailError, detailErrorValue },
+  ]);
+
+  console.log(grpdetails);
+
   const [isMobile, setisMobile] = useState(false);
   const [isEdit, setisEdit] = useState(false);
   const [groupName, setgroupName] = useState("");
@@ -161,7 +184,7 @@ const Group = () => {
             "&::-webkit-scrollbar": { display: "none" },
           }}
         >
-          <GrpList grps={sampledata} chatId={chatId} />
+          <GrpList grps={groupchatList?.groups} chatId={chatId} />
         </Grid>
 
         <Grid
@@ -179,7 +202,10 @@ const Group = () => {
           }}
         >
           {IconBtn}
-          {groupName ? (
+
+          {groupdetailLoading ? (
+            <Skeleton />
+          ) : grpdetails?.groupDetail?.name ? (
             <>
               {GroupName}
               <Typography
@@ -198,7 +224,7 @@ const Group = () => {
                 overflow={"auto"}
                 height={"50vh"}
               >
-                {sampleUsers.map((i) => (
+                {grpdetails?.groupDetail?.members?.map((i) => (
                   <UserItem
                     user={i}
                     key={i._id}

@@ -81,6 +81,44 @@ export const apiSlice = createApi({
       }),
       keepUnusedDataFor: 0,
     }),
+
+    getMembersforAddinGroups: builder.query({
+      query: () => ({
+        url: `/chats/membersforgroups`,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Chats"],
+    }),
+
+    // now creating new group
+
+    creategroup: builder.mutation({
+      query: (body) => ({
+        url: "/chats/newgroup",
+        body,
+        method: "POST",
+        credentials: "include",
+      }),
+      invalidatesTags: ["Chats"],
+    }),
+
+    myGroups: builder.query({
+      query: () => ({
+        url: "/chats/mygroups",
+        credentials: "include",
+      }),
+      // invalidatesTags:["Chats"]
+      keepUnusedDataFor: 0,
+    }),
+
+    GroupDetails: builder.query({
+      query: (id) => ({
+        url: `/chats/grpdetail/${id}`,
+        credentials: "include",
+      }),
+      // invalidatesTags:["Chats"]
+      keepUnusedDataFor: 0,
+    }),
   }),
 });
 
@@ -94,5 +132,9 @@ export const {
   useChatDetailsQuery,
   useGetMessagesQuery,
   useSendattachementsMutation,
-  useUpdateProfileMutation
+  useUpdateProfileMutation,
+  useGetMembersforAddinGroupsQuery,
+  useCreategroupMutation,
+  useMyGroupsQuery,
+  useGroupDetailsQuery,
 } = apiSlice;
