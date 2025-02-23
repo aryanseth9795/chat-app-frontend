@@ -37,7 +37,7 @@ const Group = () => {
     import("../../components/Dialog/ConfirmdeleteDialog.jsx")
   );
   const AddDialog = lazy(() => import("../../components/Dialog/AddDialog.jsx"));
-  let isAdded = false;
+  let isAdded = true;
   const navigate = useNavigate();
 
   // fetching group chat
@@ -52,12 +52,14 @@ const Group = () => {
     error: detailErrorValue,
   } = useGroupDetailsQuery(chatId, { skip: !chatId });
 
+  console.log(grpdetails)
+
   useError([
     { isError, error },
     { detailError, detailErrorValue },
   ]);
 
-  console.log(grpdetails);
+
 
   const [isMobile, setisMobile] = useState(false);
   const [isEdit, setisEdit] = useState(false);
@@ -81,10 +83,10 @@ const Group = () => {
   };
 
   useEffect(() => {
-    if (chatId) {
-      setgroupName(`Group Name ${chatId}`);
-      setGroupNameUpdatedValue(`Group Name ${chatId}`);
-    }
+    // if (chatId) {
+    //   setgroupName(grpdetails?.groupDetail?.name);
+    //   setGroupNameUpdatedValue(`Group Name ${chatId}`);
+    // }
 
     return () => {
       setgroupName("");
@@ -207,7 +209,7 @@ const Group = () => {
             <Skeleton />
           ) : grpdetails?.groupDetail?.name ? (
             <>
-              {GroupName}
+              {grpdetails?.groupDetail?.name}
               <Typography
                 variant="body1"
                 margin={"2rem"}
@@ -231,8 +233,9 @@ const Group = () => {
                     isAdded
                     styling={{
                       boxShadow: "0 0 0.5rem  rgba(0,0,0,0.2)",
-                      padding: "0.5rem 1rem",
+                      padding: "0.5rem 0.5rem",
                       borderRadius: "1rem",
+                      justifyContent:"center"
                     }}
                     // handler={removeMemberHandler}
                   />

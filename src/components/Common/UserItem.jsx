@@ -18,7 +18,7 @@ const UserItem = ({
         spacing={"1rem"}
         width={"100%"}
       >
-        <Avatar src={TransformImage(user.avatar)} />
+        <Avatar src={TransformImage(user?.avatar?.url || user?.avatar)} />
         <Stack
           sx={{
             flexGrow: "1",

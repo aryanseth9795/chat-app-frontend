@@ -6,10 +6,13 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: `${serverUrl}` }),
   tagTypes: ["Chats", "User", "Messages"],
   endpoints: (builder) => ({
+    // chat list fetch
     mychatList: builder.query({
       query: () => ({ url: "/chats/mychats", credentials: "include" }),
-      providesTags: ["Chats"],
+      invalidatesTags: ["Chats"],
     }),
+
+    // searching user
     searchUser: builder.query({
       query: (name) => ({
         url: `/users/search?name=${name}`,
@@ -17,6 +20,8 @@ export const apiSlice = createApi({
       }),
       providesTags: ["User"],
     }),
+
+    // friend Request Send
     friendRequestSend: builder.mutation({
       query: (data) => ({
         url: "/users/sendrequest",
@@ -26,6 +31,8 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+
+    // Get Notification
     getNotification: builder.query({
       query: () => ({
         url: `/users/getnotification`,
@@ -33,6 +40,8 @@ export const apiSlice = createApi({
       }),
       keepUnusedDataFor: 0,
     }),
+
+    // friend Request Accept
     friendRequestAcceptor: builder.mutation({
       query: (data) => ({
         url: "/users/acceptrequest",
@@ -42,6 +51,8 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["Chats"],
     }),
+
+    // fetching Chat details
     chatDetails: builder.query({
       query: ({ chatId, populate = false }) => {
         let url = `/chats/${chatId}`;
@@ -53,15 +64,17 @@ export const apiSlice = createApi({
       providesTags: ["Chats"],
       //
     }),
+
+    // fetching messages of a User
     getMessages: builder.query({
       query: ({ chatId, page }) => ({
         url: `/chats/message/${chatId}?page=${page}`,
         credentials: "include",
       }),
-
       keepUnusedDataFor: 0,
     }),
 
+    // Send Attachments
     sendattachements: builder.mutation({
       query: (files) => ({
         url: "/chats/message/attachment",
@@ -71,7 +84,7 @@ export const apiSlice = createApi({
       }),
       keepUnusedDataFor: 0,
     }),
-
+    // Updating Profile Users
     updateProfile: builder.mutation({
       query: (data) => ({
         url: "/users/update",
@@ -81,7 +94,7 @@ export const apiSlice = createApi({
       }),
       keepUnusedDataFor: 0,
     }),
-
+    // Get members for Add in Groups
     getMembersforAddinGroups: builder.query({
       query: () => ({
         url: `/chats/membersforgroups`,
@@ -114,6 +127,14 @@ export const apiSlice = createApi({
     GroupDetails: builder.query({
       query: (id) => ({
         url: `/chats/grpdetail/${id}`,
+        credentials: "include",
+      }),
+      // invalidatesTags:["Chats"]
+      keepUnusedDataFor: 0,
+    }),
+    GroupDetails: builder.query({
+      query: (id) => ({
+        url: `/${id}`,
         credentials: "include",
       }),
       // invalidatesTags:["Chats"]
