@@ -13,6 +13,7 @@ import {
   Skeleton,
 } from "@mui/material";
 import { green } from "../../constants/color";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
@@ -26,23 +27,84 @@ import { bgGradient, matBlack } from "../../constants/color";
 import { Link } from "../../components/Styles/styledComponents";
 import { sampledata } from "../../constants/sampledata";
 import AvatarCard from "../../components/Common/AvatarCard.jsx";
-import { sampleUsers } from "../../constants/sampledata";
 import UserItem from "../../components/Common/UserItem.jsx";
-import { useGroupDetailsQuery, useMyGroupsQuery } from "../../redux/api/api.js";
+import {
+  useDeletegroupMutation,
+  useGroupDetailsQuery,
+  useMyGroupsQuery,
+  useRenamegroupMutation,
+} from "../../redux/api/api.js";
 import { useError } from "../../hooks/customHooks.jsx";
-import { LoaderIcon } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const Group = () => {
+  const navigate = useNavigate();
+  // importing all lazy module
   const ConfirmdeleteDialog = lazy(() =>
     import("../../components/Dialog/ConfirmdeleteDialog.jsx")
   );
   const AddDialog = lazy(() => import("../../components/Dialog/AddDialog.jsx"));
-  let isAdded = true;
-  const navigate = useNavigate();
+  const RemoveDialog = lazy(() =>
+    import("../../components/Dialog/RemoveDialog.jsx")
+  );
 
-  // fetching group chat
+  // Definig All State Variables
+  const [isMobile, setisMobile] = useState(false);
+  const [isEdit, setisEdit] = useState(true);
+  const [groupName, setgroupName] = useState("");
+  const [groupNameUpdatedValue, setGroupNameUpdatedValue] = useState("");
+  const [delDialog, setdelDialog] = useState(false);
+  const [isAdded, setisAdded] = useState(false);
+  const [cnfDel, setcnfDel] = useState(false);
 
-  const chatId = useSearchParams()[0].get("group");
+  // fetching group chat ID
+
+  let chatId = useSearchParams()[0]?.get("group");
+
+  // All Function Handlers
+  const grpcloseHandler = () => {
+    return navigate("/");
+  };
+
+  const opendeletedialog = () => {
+    setcnfDel(true);
+  };
+  const closedeletedialog = () => {
+    setcnfDel(false);
+  };
+
+  const deletedhandler = async () => {
+    const tid = toast.loading("Deleting Group ");
+    try {
+      const delres = await deleteGroup({ chatId });
+
+      if (delres?.data?.success) {
+        toast.success(delres?.data?.message, { id: tid });
+        navigate("/", { replace: true });
+      }
+      if (delres?.error?.data?.success)
+        toast.error(delres?.error?.data?.message, { id: tid });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      closedeletedialog();
+    }
+  };
+
+  const openaddhandler = () => {
+    setisAdded(true);
+  };
+
+  useEffect(() => {
+    return () => {
+      setisMobile(false);
+      setgroupName("");
+      setGroupNameUpdatedValue("");
+      setisEdit(false);
+    };
+  }, [chatId]);
+
+  // Fetching Data
   const { data: groupchatList, isLoading, error, isError } = useMyGroupsQuery();
 
   const {
@@ -52,59 +114,58 @@ const Group = () => {
     error: detailErrorValue,
   } = useGroupDetailsQuery(chatId, { skip: !chatId });
 
-  console.log(grpdetails)
-
+  const [
+    deleteGroup,
+    {
+      isLoading: deletingGroupLoading,
+      error: DeletingError,
+      isError: deltingIserror,
+    },
+  ] = useDeletegroupMutation();
+  //All Errors handling
   useError([
     { isError, error },
-    { detailError, detailErrorValue },
+    { isError: detailError, error: detailErrorValue },
+    {
+      isError: deltingIserror,
+      error: DeletingError,
+    },
   ]);
 
+  const [RenameGroup] = useRenamegroupMutation();
+  const updateGroupName = async () => {
+    const tid = toast.loading("Renaming Group");
 
+    try {
+      const res = await RenameGroup({ chatId, name: groupNameUpdatedValue });
+      if (res?.data?.success) {
+        toast.success(res?.data?.message, { id: tid });
+      }
+      if (res?.error?.data?.success)
+        toast.error(res?.error?.data?.message, { id: tid });
 
-  const [isMobile, setisMobile] = useState(false);
-  const [isEdit, setisEdit] = useState(false);
-  const [groupName, setgroupName] = useState("");
-  const [groupNameUpdatedValue, setGroupNameUpdatedValue] = useState("");
-  const [delDialog, setdelDialog] = useState(false);
+    } catch (error) {
+      console.log(error);
+      toast.error(error, { id: tid });
 
-  const opendeletedialog = () => {
-    setdelDialog(true);
-  };
-  const closedeletedialog = () => {
-    setdelDialog(false);
-  };
-  const openaddhandler = () => {};
-  const deletehandler = () => {
-    console.log("deleted");
-    closedeletedialog();
-  };
-  const grpcloseHandler = () => {
-    return navigate("/");
-  };
-
-  useEffect(() => {
-    // if (chatId) {
-    //   setgroupName(grpdetails?.groupDetail?.name);
-    //   setGroupNameUpdatedValue(`Group Name ${chatId}`);
-    // }
-
-    return () => {
-      setgroupName("");
-      setGroupNameUpdatedValue("");
+    } finally {
       setisEdit(false);
-    };
-  }, [chatId]);
-  const updateGroupName = () => {
-    setisEdit(false);
-    console.log(groupNameUpdatedValue);
+    }
   };
+
+  const closeHandler = () => {
+    setisMobile(false);
+  };
+
+  // Jsx Function
   const GroupName = (
     <Stack
       direction={"row"}
       alignItems={"center"}
-      justifyContent={"center"}
-      spacing={"1rem"}
-      padding={"3rem"}
+      justifyContent={"space-between"}
+      spacing={{ xs: "0.5rem", sm: "10rem" }}
+      padding={"2rem"}
+      width={"100%"}
     >
       {isEdit ? (
         <>
@@ -121,15 +182,41 @@ const Group = () => {
         </>
       ) : (
         <>
-          <Typography variant="h4">{groupName}</Typography>
           <IconButton
+            sx={{
+              color: "red",
+              // bgcolor: matBlack,
+              borderRadius: "8px",
+              paddingX: 2,
+              paddingY: 1,
+            }}
             // disabled={isLoadingGroupName}
             onClick={() => setisEdit(true)}
           >
+            <Typography variant="body2" padding={"1rem"}>
+              Change Name
+            </Typography>
             <EditIcon />
           </IconButton>
+          <Typography variant="h4">{grpdetails?.groupDetail?.name}</Typography>
         </>
       )}
+
+      <Tooltip>
+        <IconButton
+          sx={{
+            color: "red",
+            // bgcolor: matBlack,
+            borderRadius: "8px",
+            paddingX: 2,
+            paddingY: 1,
+          }}
+          onClick={() => setcnfDel(true)}
+        >
+          <DeleteForeverIcon />
+          <Typography variant="body2"> Delete Group</Typography>
+        </IconButton>
+      </Tooltip>
     </Stack>
   );
 
@@ -165,16 +252,12 @@ const Group = () => {
     </>
   );
 
-  const closeHandler = () => {
-    setisMobile(false);
-  };
-
   return (
     <>
       <Grid container height={"100vh"}>
         <Grid
           item
-          sm={4}
+          sm={3}
           bgcolor={green}
           sx={{
             display: {
@@ -191,7 +274,7 @@ const Group = () => {
 
         <Grid
           xs={12}
-          sm={8}
+          sm={9}
           item
           sx={{
             display: "flex",
@@ -209,12 +292,14 @@ const Group = () => {
             <Skeleton />
           ) : grpdetails?.groupDetail?.name ? (
             <>
-              {grpdetails?.groupDetail?.name}
-              <Typography
-                variant="body1"
-                margin={"2rem"}
-                alignSelf={"flex-start"}
-              >
+              <Stack direction={"row"} spacing={"10rem"}>
+                {/* <Typography variant="h3" color="primary">
+                  {" "}
+                  {grpdetails?.groupDetail?.name}
+                </Typography> */}
+                {GroupName}
+              </Stack>
+              <Typography variant="h5" margin={"2rem"} alignSelf={"center"}>
                 Members
               </Typography>
               <Stack
@@ -235,9 +320,9 @@ const Group = () => {
                       boxShadow: "0 0 0.5rem  rgba(0,0,0,0.2)",
                       padding: "0.5rem 0.5rem",
                       borderRadius: "1rem",
-                      justifyContent:"center"
+                      justifyContent: "center",
                     }}
-                    // handler={removeMemberHandler}
+                    btnhide={true}
                   />
                 ))}
                 {/* members will come here  */}
@@ -258,9 +343,9 @@ const Group = () => {
                   size="large"
                   color="error"
                   startIcon={<DeleteIcon />}
-                  onClick={opendeletedialog}
+                  onClick={() => setdelDialog(true)}
                 >
-                  Delete
+                  Delete Members
                 </Button>
                 <Button
                   size="large"
@@ -279,19 +364,29 @@ const Group = () => {
       </Grid>
 
       {/* { opendeletehandler && <ConfirmdeleteDialog open={opendeletehandler}/>} */}
-      {delDialog && (
+      {cnfDel && (
         <Suspense fallback={<Backdrop open />}>
           <ConfirmdeleteDialog
-            open={delDialog}
+            open={cnfDel}
             closeHandler={closedeletedialog}
-            deletehandler={deletehandler}
+            deletehandler={deletedhandler}
           />
         </Suspense>
       )}
 
       {isAdded && (
         <Suspense fallback={<Backdrop open />}>
-          <AddDialog />
+          <AddDialog open={isAdded} setisAdded={setisAdded} chatId={chatId} />
+        </Suspense>
+      )}
+      {delDialog && (
+        <Suspense fallback={<Backdrop open />}>
+          <RemoveDialog
+            open={delDialog}
+            setdelDialog={setdelDialog}
+            chatId={chatId}
+            members={grpdetails?.groupDetail?.members}
+          />
         </Suspense>
       )}
 
@@ -300,7 +395,7 @@ const Group = () => {
         onClose={closeHandler}
         sx={{ display: { xs: "block", sm: "none" } }}
       >
-        <GrpList w={"70vw"} grps={sampledata} />
+        <GrpList w={"70vw"} grps={groupchatList?.groups} chatId={chatId} />
       </Drawer>
     </>
   );

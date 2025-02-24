@@ -9,6 +9,7 @@ const UserItem = ({
   disablehandler = false,
   isAdded = false,
   styling,
+  btnhide = false,
 }) => {
   return (
     <ListItem>
@@ -38,17 +39,22 @@ const UserItem = ({
             {user.username}
           </Typography>
         </Stack>
-        <IconButton
-          onClick={() => userhandler(user._id)}
-          disabled={disablehandler}
-          sx={{
-            bgcolor: isAdded ? "error.main" : "primary.main",
-            color: "white",
-            "&hover": { bgcolor: isAdded ? "error" : "primary.dark" },
-          }}
-        >
-          {isAdded ? <Remove /> : <Add />}
-        </IconButton>
+
+        {btnhide ? (
+          <></>
+        ) : (
+          <IconButton
+            onClick={() => userhandler(user._id)}
+            disabled={disablehandler}
+            sx={{
+              bgcolor: isAdded ? "error.main" : "primary.main",
+              color: "white",
+              "&hover": { bgcolor: isAdded ? "error" : "primary.dark" },
+            }}
+          >
+            {isAdded ? <Remove /> : <Add />}
+          </IconButton>
+        )}
       </Stack>
     </ListItem>
   );

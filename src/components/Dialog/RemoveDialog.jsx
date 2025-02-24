@@ -4,40 +4,36 @@ import UserItem from "../Common/UserItem";
 import {
   useAddingroupMutation,
   useAddMembersListInGrpQuery,
+  useRemoveingroupMutation,
 } from "../../redux/api/api";
 import toast from "react-hot-toast";
 
-const AddDialog = ({ open,
-   isloadingMembers, chatId, setisAdded }) => {
-  const [addMembers] = useAddingroupMutation();
+const RemoveDialog = ({ members, chatId, setdelDialog }) => {
+  const [RemoveMembers] = useRemoveingroupMutation();
+
   const closeHandler = () => {
     setSelectedMembers([]);
-    setisAdded(false);
+    setdelDialog(false);
   };
-  const submitAddHandler = async () => {
+  const submitRemoveHandler = async () => {
     // here mutation called
-    const adId = toast.loading("Adding Members In Group");
+    const adId = toast.loading("Removing Selected Members");
     try {
-      const result = await addMembers({ chatId, members: selectedMembers });
+      const result = await RemoveMembers({ chatId, members: selectedMembers });
+
       if (result?.data?.success) {
         toast.success(result?.data?.message, { id: adId });
-        if (result?.error) {
-          toast.error(result?.error?.message, { id: adId });
-        }
+      }
+      if (result?.error) {
+        toast.error(result?.error?.data?.message, { id: adId });
       }
     } catch (error) {
       toast.error(error, { id: adId });
-
-      console.log(error);
+    } finally {
+      closeHandler();
     }
-    closeHandler();
   };
 
-  const { data: members } = useAddMembersListInGrpQuery(chatId, {
-    skip: !chatId,
-  });
-
-  // const [members, setMembers] = useState(sampleUsers);
   const [selectedMembers, setSelectedMembers] = useState([]);
   const memberhandler = (id) => {
     setSelectedMembers((prev) =>
@@ -48,12 +44,12 @@ const AddDialog = ({ open,
   };
 
   return (
-    <Dialog open={open} onClose={closeHandler}>
+    <Dialog open onClose={closeHandler}>
       <Stack width={"25rem"} spacing={"2rem"} p={"2rem"}>
         <DialogTitle textAlign={"center"}> Add Members</DialogTitle>
         <Stack spacing={"1rem"}>
-          {members?.leftmembersforadd?.length > 0 ? (
-            members?.leftmembersforadd.map((i) => {
+          {members?.length > 0 ? (
+            members?.map((i) => {
               return (
                 <UserItem
                   user={i}
@@ -73,8 +69,8 @@ const AddDialog = ({ open,
           </Button>
           <Button
             variant="outlined"
-            onClick={submitAddHandler}
-            disabled={isloadingMembers}
+            onClick={submitRemoveHandler}
+            // disabled={isloadingMembers}
           >
             Submit Changes
           </Button>
@@ -84,4 +80,4 @@ const AddDialog = ({ open,
   );
 };
 
-export default AddDialog;
+export default RemoveDialog;

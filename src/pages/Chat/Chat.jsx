@@ -12,7 +12,7 @@ import { grayColor, green } from "../../constants/color";
 import { NEW_MESSAGE, START_TYPING, STOP_TYPING } from "../../constants/event";
 import { useError, useSocketEventHook } from "../../hooks/customHooks";
 import { useChatDetailsQuery, useGetMessagesQuery } from "../../redux/api/api";
-import { setIsFileMenu } from "../../redux/slices/MiscSlice";
+import { setIsFileMenu, setIsMenu } from "../../redux/slices/MiscSlice";
 import { getSocket } from "../../socket";
 import { ResetchatAlert } from "../../redux/slices/ChatSlice";
 
@@ -90,7 +90,7 @@ const Chat = ({ chatId, user }) => {
   const startTypingListen = useCallback(
     (data) => {
       if (data.chatId !== chatId) return;
-      console.log(data, "tying");
+    
       setMemberTyping(true);
     },
     [chatId]
@@ -100,7 +100,7 @@ const Chat = ({ chatId, user }) => {
     (data) => {
       if (data.chatId !== chatId) return;
 
-      console.log(data, "Stop-tying");
+    
       setMemberTyping(false);
     },
     [chatId]
@@ -120,11 +120,13 @@ const Chat = ({ chatId, user }) => {
   useEffect(() => {
     dispatch(ResetchatAlert(chatId));
     return () => {
+      dispatch(setIsMenu(false))
       setMessage("");
       setData([]);
       setallMessages([]);
       setPages(1);
       setMessages([]);
+
     };
   }, [chatId]);
 

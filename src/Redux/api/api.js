@@ -4,7 +4,7 @@ import serverUrl from "../../constants/config";
 export const apiSlice = createApi({
   reducerPath: "Api",
   baseQuery: fetchBaseQuery({ baseUrl: `${serverUrl}` }),
-  tagTypes: ["Chats", "User", "Messages"],
+  tagTypes: ["Chats", "User", "Messages","GrpDetail","del"],
   endpoints: (builder) => ({
     // chat list fetch
     mychatList: builder.query({
@@ -120,8 +120,9 @@ export const apiSlice = createApi({
         url: "/chats/mygroups",
         credentials: "include",
       }),
-      // invalidatesTags:["Chats"]
-      keepUnusedDataFor: 0,
+  
+      providesTags:["Chats"]
+    
     }),
 
     GroupDetails: builder.query({
@@ -129,16 +130,54 @@ export const apiSlice = createApi({
         url: `/chats/grpdetail/${id}`,
         credentials: "include",
       }),
-      // invalidatesTags:["Chats"]
-      keepUnusedDataFor: 0,
+    
+      providesTags:["GrpDetail","del"]
     }),
-    GroupDetails: builder.query({
+    addMembersListInGrp: builder.query({
       query: (id) => ({
-        url: `/${id}`,
+        url: `/chats/membersforadd/${id}`,
         credentials: "include",
       }),
-      // invalidatesTags:["Chats"]
+   
       keepUnusedDataFor: 0,
+    }),
+
+    addingroup: builder.mutation({
+      query: (body) => ({
+        url: "/chats/addmembers",
+        body,
+        method: "PUT",
+        credentials: "include",
+      }),
+      invalidatesTags: ["GrpDetail"],
+    }),
+    Removeingroup: builder.mutation({
+      query: (body) => ({
+        url: "/chats/removemember",
+        body,
+        method: "PUT",
+        credentials: "include",
+      }),
+      invalidatesTags: ["GrpDetail"],
+    }),
+    Deletegroup: builder.mutation({
+      query: (body) => ({
+        url: "/chats/deletegrp",
+        body,
+        method: "DELETE",
+        credentials: "include",
+      }),
+      invalidatesTags: ["GrpDetail","Chats","del"],
+    }),
+
+    Renamegroup: builder.mutation({
+      query: (body) => ({
+        url: "/chats/renamegrp",
+        body,
+        method: "PUT",
+        credentials: "include",
+      }),
+      invalidatesTags: ["GrpDetail","Chats"],
     }),
   }),
 });
@@ -158,4 +197,8 @@ export const {
   useCreategroupMutation,
   useMyGroupsQuery,
   useGroupDetailsQuery,
+  useAddMembersListInGrpQuery,
+  useAddingroupMutation,
+ useRemoveingroupMutation,useDeletegroupMutation,
+ useRenamegroupMutation
 } = apiSlice;

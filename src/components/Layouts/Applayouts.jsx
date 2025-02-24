@@ -24,7 +24,7 @@ const AppLayout = () => (WrappedComponent) => {
   return (props) => {
     const dispatch = useDispatch();
     const param = useParams();
-    // console.log(param.id)
+ 
     const chatId = param?.id;
     const { isMobile } = useSelector((state) => state.Misc);
     const { user } = useSelector((state) => state.Auth);
@@ -42,7 +42,7 @@ const AppLayout = () => (WrappedComponent) => {
     };
 
     const socket = getSocket();
-    // console.log(socket);
+  
     const newMessageAlert = useCallback((data) => {
       if (chatId === data?.chatId) return;
       dispatch(setChatAlert(data));
@@ -84,6 +84,7 @@ const AppLayout = () => (WrappedComponent) => {
                 onlineusers={["1", "2"]}
                 handleDeleteChat={handleDeleteChat}
                 newMessageAlert={chatAlert}
+               
               />
             )}
           </Grid>
