@@ -17,13 +17,16 @@ const ChatList = ({
   handleDeleteChat,
 }) => {
   return (
-    <Stack width={w} >
+    <Stack width={w}>
       {chats.map((data, i) => {
-        const { _id, avatar, name, groupchat, members,username } = data;
+        const { _id, avatar, name, groupchat, members, username } = data;
         const newMessageAlerts = newMessageAlert.find(
           ({ chatId }) => chatId === _id
         );
-        const isOnline = members.some((memeber) => onlineusers.includes(_id));
+
+        const isOnline = members.some((memeber) =>
+          onlineusers.includes(members?._id)
+        );
         return (
           <ChatItem
             index={index}
