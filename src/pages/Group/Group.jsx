@@ -51,7 +51,7 @@ const Group = () => {
   // Definig All State Variables
   const [isMobile, setisMobile] = useState(false);
   const [isEdit, setisEdit] = useState(true);
-  const [groupName, setgroupName] = useState("");
+  // const [groupName, setgroupName] = useState("");
   const [groupNameUpdatedValue, setGroupNameUpdatedValue] = useState("");
   const [delDialog, setdelDialog] = useState(false);
   const [isAdded, setisAdded] = useState(false);
@@ -76,11 +76,14 @@ const Group = () => {
   const deletedhandler = async () => {
     const tid = toast.loading("Deleting Group ");
     try {
-      const delres = await deleteGroup({ chatId });
+      const delres = await deleteGroup({chatId} );
 
       if (delres?.data?.success) {
         toast.success(delres?.data?.message, { id: tid });
-        navigate("/", { replace: true });
+        // refetch();
+        // grpRefetch();
+        navigate("/groups", { replace: true });
+        console.log(grpdetails)
       }
       if (delres?.error?.data?.success)
         toast.error(delres?.error?.data?.message, { id: tid });
@@ -98,20 +101,21 @@ const Group = () => {
   useEffect(() => {
     return () => {
       setisMobile(false);
-      setgroupName("");
+      // setgroupName("");
       setGroupNameUpdatedValue("");
       setisEdit(false);
     };
   }, [chatId]);
 
   // Fetching Data
-  const { data: groupchatList, isLoading, error, isError } = useMyGroupsQuery();
+  const { data: groupchatList, isLoading, error, isError ,refetch} = useMyGroupsQuery();
 
   const {
     data: grpdetails,
     isLoading: groupdetailLoading,
     isError: detailError,
     error: detailErrorValue,
+    refetch:grpRefetch
   } = useGroupDetailsQuery(chatId, { skip: !chatId });
 
   const [

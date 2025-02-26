@@ -14,6 +14,7 @@ import { useParams } from "react-router-dom";
 import {
   NEW_NOTIFICATION_ALERT,
   NEW_MESSAGE_ALERT,
+  REFETCH_CHATS,
 } from "../../constants/event.js";
 import {
   NotificationCountIncrement,
@@ -30,7 +31,7 @@ const AppLayout = () => (WrappedComponent) => {
     const { user } = useSelector((state) => state.Auth);
     const { chatAlert } = useSelector((state) => state.Chat);
 
-    const { data, error, isError, isLoading } = useMychatListQuery();
+    const { data, error, isError, isLoading ,refetch} = useMychatListQuery();
 
     useError([{ isError, error }]);
 
@@ -50,9 +51,13 @@ const AppLayout = () => (WrappedComponent) => {
     const newnotificationAlert = useCallback(() => {
       dispatch(NotificationCountIncrement());
     }, []);
+    const RefetechList = useCallback(() => {
+      refetch()
+    }, []);
     const socketEvents = {
       [NEW_MESSAGE_ALERT]: newMessageAlert,
       [NEW_NOTIFICATION_ALERT]: newnotificationAlert,
+      [REFETCH_CHATS]:RefetechList,
     };
 
     useSocketEventHook(socket, socketEvents);

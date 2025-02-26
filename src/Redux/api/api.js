@@ -131,7 +131,7 @@ export const apiSlice = createApi({
         credentials: "include",
       }),
     
-      providesTags:["GrpDetail","del"]
+    invalidatesTags:["Chats"]
     }),
     addMembersListInGrp: builder.query({
       query: (id) => ({

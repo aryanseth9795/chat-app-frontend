@@ -35,9 +35,9 @@ const Login = () => {
       "Checking Server Status, Please Wait for a moment"
     );
     try {
-      console.log("Checking Server Status");  
-      const resp=await axios.get(server);
-      if(resp) toast.success("Server is Online ! Go Ahead", { id: checkId });
+      console.log("Checking Server Status");
+      const resp = await axios.get(server);
+      if (resp) toast.success("Server is Online ! Go Ahead", { id: checkId });
     } catch (error) {
       toast.error("Server is Down ! Please wait a moment", { id: checkId });
       toast.success("Trying to reconnect to server...");
@@ -56,6 +56,7 @@ const Login = () => {
   }, [avatar]);
 
   const handlelogin = async (e) => {
+    const LoginLoader = toast.loading("Signing In ...");
     e.preventDefault();
     try {
       const config = {
@@ -71,15 +72,17 @@ const Login = () => {
         config
       );
       dispatch(userexist(res?.data?.success));
-      toast.success(res?.data?.message);
+      toast.success(res?.data?.message, { id: LoginLoader });
     } catch (error) {
       dispatch(userNotexist());
-      toast.error(error?.response?.data?.message || "Something went Wrong");
+      toast.error(error?.response?.data?.message || "Something went Wrong", {
+        id: LoginLoader,
+      });
     }
   };
   const handlesignup = async (e) => {
     e.preventDefault();
-
+    const Tid = toast.loading("Signing Up...");
     try {
       const formData = new FormData();
       formData.append("name", name.value);
@@ -103,10 +106,12 @@ const Login = () => {
         config
       );
       dispatch(userexist(res?.data?.success));
-      toast.success(res?.data?.message);
+      toast.success(res?.data?.message, { id: Tid });
     } catch (error) {
       dispatch(userNotexist());
-      toast.error(error?.response?.data?.message || "Something Went Wrong");
+      toast.error(error?.response?.data?.message || "Something Went Wrong", {
+        id: Tid,
+      });
     }
   };
   return (
