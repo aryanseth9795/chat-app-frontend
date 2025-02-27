@@ -1,41 +1,39 @@
-import React, { useState, memo, useEffect, Suspense, lazy } from "react";
 import {
-  Stack,
-  Box,
-  Drawer,
-  Grid,
-  IconButton,
-  Tooltip,
-  Typography,
-  TextField,
-  Button,
-  Backdrop,
-  Skeleton,
-} from "@mui/material";
-import { green } from "../../constants/color";
+  Add as AddIcon,
+  Delete as DeleteIcon,
+  Done as DoneIcon,
+  Edit as EditIcon,
+} from "@mui/icons-material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
-  Edit as EditIcon,
-  Done as DoneIcon,
-  Add as AddIcon,
-  Delete as DeleteIcon,
-} from "@mui/icons-material";
+  Backdrop,
+  Box,
+  Button,
+  Drawer,
+  Grid,
+  IconButton,
+  Skeleton,
+  Stack,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import React, { Suspense, lazy, memo, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { bgGradient, matBlack } from "../../constants/color";
-import { Link } from "../../components/Styles/styledComponents";
-import { sampledata } from "../../constants/sampledata";
 import AvatarCard from "../../components/Common/AvatarCard.jsx";
 import UserItem from "../../components/Common/UserItem.jsx";
+import { Link } from "../../components/Styles/styledComponents";
+import { bgGradient, green, matBlack } from "../../constants/color";
+import { useError } from "../../hooks/customHooks.jsx";
 import {
   useDeletegroupMutation,
   useGroupDetailsQuery,
   useMyGroupsQuery,
   useRenamegroupMutation,
 } from "../../redux/api/api.js";
-import { useError } from "../../hooks/customHooks.jsx";
-import toast from "react-hot-toast";
 
 const Group = () => {
   const navigate = useNavigate();
