@@ -54,14 +54,13 @@ export const apiSlice = createApi({
 
     // fetching Chat details
     chatDetails: builder.query({
-      query: ({ chatId, populate = false }) => {
+      query: ({ chatId }) => {
         let url = `/chats/${chatId}`;
-        if (populate) {
-          url += url + `?populate=true`;
-        }
+       
         return { url, credentials: "include" };
       },
       providesTags: ["Chats"],
+      // keepUnusedDataFor:300,
       //
     }),
 
@@ -181,6 +180,8 @@ export const apiSlice = createApi({
     }),
   }),
 });
+
+
 
 // Export hooks for usage in components
 export const {

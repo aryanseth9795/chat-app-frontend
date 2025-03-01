@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import Title from "../Common/Title";
 import Header from "./Header";
 import { Grid, Drawer, Skeleton } from "@mui/material";
@@ -25,13 +25,13 @@ const AppLayout = () => (WrappedComponent) => {
   return (props) => {
     const dispatch = useDispatch();
     const param = useParams();
- 
+
     const chatId = param?.id;
     const { isMobile } = useSelector((state) => state.Misc);
     const { user } = useSelector((state) => state.Auth);
     const { chatAlert } = useSelector((state) => state.Chat);
 
-    const { data, error, isError, isLoading ,refetch} = useMychatListQuery();
+    const { data, error, isError, isLoading, refetch } = useMychatListQuery();
 
     useError([{ isError, error }]);
 
@@ -43,24 +43,33 @@ const AppLayout = () => (WrappedComponent) => {
     };
 
     const socket = getSocket();
-  
-    const newMessageAlert = useCallback((data) => {
-      if (chatId === data?.chatId) return;
-      dispatch(setChatAlert(data));
-    }, [chatId]);
+
+    const newMessageAlert = useCallback(
+      (data) => {
+        if (chatId === data?.chatId) return;
+        dispatch(setChatAlert(data));
+      },
+      [chatId]
+    );
     const newnotificationAlert = useCallback(() => {
       dispatch(NotificationCountIncrement());
     }, []);
     const RefetechList = useCallback(() => {
-      refetch()
+      refetch();
     }, []);
     const socketEvents = {
       [NEW_MESSAGE_ALERT]: newMessageAlert,
       [NEW_NOTIFICATION_ALERT]: newnotificationAlert,
-      [REFETCH_CHATS]:RefetechList,
+      [REFETCH_CHATS]: RefetechList,
     };
 
     useSocketEventHook(socket, socketEvents);
+
+    useEffect(() => {
+      return () => {
+        if (isMobile) drawerClose();
+      };
+    }, [param?.id]);
 
     return (
       <>
@@ -89,7 +98,6 @@ const AppLayout = () => (WrappedComponent) => {
                 onlineusers={["1", "2"]}
                 handleDeleteChat={handleDeleteChat}
                 newMessageAlert={chatAlert}
-               
               />
             )}
           </Grid>

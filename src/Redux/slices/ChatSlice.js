@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   NotificationCount: 0,
-
+member:null,
   chatAlert: [],
 };
 const ChatSlice = createSlice({
@@ -34,7 +34,12 @@ const ChatSlice = createSlice({
       state.chatAlert = state.chatAlert.filter(
         (item) => item.chatId !== action.payload
       );
+      
     },
+    setmember: (state, action) => {
+      state.member = action.payload
+      
+  },
   },
 });
 
@@ -44,5 +49,6 @@ export const {
   NotificationReset,
   setChatAlert,
   ResetchatAlert,
+  setmember
 } = ChatSlice.actions;
 export default ChatSlice;

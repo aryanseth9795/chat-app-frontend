@@ -14,7 +14,8 @@ import { useError, useSocketEventHook } from "../../hooks/customHooks";
 import { useChatDetailsQuery, useGetMessagesQuery } from "../../redux/api/api";
 import { setIsFileMenu, setIsMenu } from "../../redux/slices/MiscSlice";
 import { getSocket } from "../../socket";
-import { ResetchatAlert } from "../../redux/slices/ChatSlice";
+import { ResetchatAlert, setmember } from "../../redux/slices/ChatSlice";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 const Chat = ({ chatId, user }) => {
   const dispatch = useDispatch();
@@ -48,8 +49,13 @@ const Chat = ({ chatId, user }) => {
   const socket = getSocket();
 
   // fetching chatDetails from server using chatId
-  const chatDetails = useChatDetailsQuery({ chatId, skip: !chatId });
+  const {data:chatDetails,isLoading,isError,error} = 
+  useChatDetailsQuery(chatId ? { chatId } : skipToken);
+  // useChatDetailsQuery({chatId}, {skip: !chatId });
+ 
 
+
+console.log(chatDetails?.chatDetails)
   // fetching messages chunk
   const oldMessageChunks = useGetMessagesQuery({ chatId, page });
 
@@ -71,7 +77,7 @@ const Chat = ({ chatId, user }) => {
     },
   ]);
 
-  const members = chatDetails?.data?.chat?.members;
+  const members = chatDetails?.chatDetails?.members;
 
   const messageSendHandle = (e) => {
     e.preventDefault();
@@ -90,7 +96,6 @@ const Chat = ({ chatId, user }) => {
   const startTypingListen = useCallback(
     (data) => {
       if (data.chatId !== chatId) return;
-    
       setMemberTyping(true);
     },
     [chatId]
@@ -99,8 +104,6 @@ const Chat = ({ chatId, user }) => {
   const stopTypingListen = useCallback(
     (data) => {
       if (data.chatId !== chatId) return;
-
-    
       setMemberTyping(false);
     },
     [chatId]
@@ -119,6 +122,7 @@ const Chat = ({ chatId, user }) => {
 
   useEffect(() => {
     dispatch(ResetchatAlert(chatId));
+
     return () => {
       dispatch(setIsMenu(false))
       setMessage("");
@@ -126,10 +130,15 @@ const Chat = ({ chatId, user }) => {
       setallMessages([]);
       setPages(1);
       setMessages([]);
-
     };
   }, [chatId]);
 
+
+  useEffect(()=>{
+if(!isLoading){
+  dispatch(setmember(chatDetails?.chatDetails?.user))
+}
+  },[chatId,chatDetails])
   // Chating status
   const Timerref = useRef(null);
   const messagehandler = (e) => {
