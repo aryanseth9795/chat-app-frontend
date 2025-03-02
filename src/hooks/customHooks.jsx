@@ -28,7 +28,7 @@ export const useAsyncMutation = (mutationhook) => {
         });
         setData(res.data);
       } else {
-        toast.error(res?.error?.data?.message || "Something went Wrong!", {
+        toast.error(res?.error?.data?.message || "Something went Wrong !" , {
           id: toastId,
         });
       }

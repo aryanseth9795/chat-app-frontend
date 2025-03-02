@@ -35,9 +35,11 @@ import {
   setIsSearch,
 } from "../../redux/slices/MiscSlice";
 import { getSocket } from "../../socket";
-import { NotificationReset } from "../../redux/slices/ChatSlice";
+import { NotificationReset, setmember } from "../../redux/slices/ChatSlice";
 import { useParams } from "react-router-dom";
 import AvatarCard from "../Common/AvatarCard";
+import { useAsyncMutation } from "../../hooks/customHooks";
+import { useDeleteChatMutation } from "../../redux/api/api";
 
 //calling lazy components
 const NewGroupDialog = lazy(() => import("../Dialog/NewGroupDialog"));
@@ -89,6 +91,15 @@ const Header = () => {
       toast.error(error?.response?.data?.message);
     }
   };
+
+  const [deletehandler, isLoading, data] = useAsyncMutation(
+    useDeleteChatMutation
+  );
+  const DeleteChat = async () => {
+    await deletehandler("Deleting Chat...", { chatId: member?.chatId });
+    navigate("/");
+    dispatch(setmember(null));
+  };
   const IconBtn = ({ title, icon, onClick, value }) => {
     return (
       <Tooltip title={title}>
@@ -121,25 +132,43 @@ const Header = () => {
                   </IconButton>
                 </Box>
 
-                <Box gap={"2rem"} display={"flex"} flexDirection={"row"} alignContent={"center"}>
-                <Box position={"relative"} >
-                  {/* <AvatarCard
-                    avatar={member?.avatar?.url ? [member.avatar.url] : []}
-                    pheight="1.5rem"
-                    pwidth="1.5rem"
-                    height="2rem"
-                    width="2rem"
-                  /> */}
-                </Box>
-                <Box>
-                  <Typography
-                    sx={{ color: black, typography: { xs: "body2", sm: "h4" } }}
-                    p={{ xs: "0rem", sm: "1rem" }}
-                    justifyContent={"center"}
+                <Box
+                  gap={"2rem"}
+                  display={"flex"}
+                  flexDirection={"row"}
+                  alignContent={"center"}
+                  sx={{ paddingLeft: { sm: "25rem" } }}
+                >
+                  <Box
+                    position={"relative"}
+                    display={member ? "block" : "none"}
                   >
-                    {member?.name ? member.name : "ChatsApp"}
-                  </Typography>
-                </Box>
+                    <AvatarCard
+                      avatar={
+                        member?.groupChat
+                          ? member.avatar
+                          : member?.avatar
+                          ? [member?.avatar]
+                          : [""]
+                      }
+                      pheight="1.5rem"
+                      pwidth="1.5rem"
+                      height="2rem"
+                      width="2rem"
+                    />
+                  </Box>
+                  <Box>
+                    <Typography
+                      sx={{
+                        color: black,
+                        typography: { xs: "body2", sm: "h4" },
+                        paddingLeft: "2rem",
+                      }}
+                      justifyContent={"center"}
+                    >
+                      {member?.name ? member.name : "ChatsApp"}
+                    </Typography>
+                  </Box>
                 </Box>
                 <Box sx={{ flexGrow: 1 }}> </Box>
                 <Box display={param?.id ? "none" : "block"}>
@@ -179,7 +208,8 @@ const Header = () => {
                   <IconBtn
                     title={"Delete"}
                     icon={<DeleteIcon />}
-                    onClick={navigateToGroup}
+                    onClick={DeleteChat}
+                    disabled={isLoading}
                   />
 
                   <IconBtn

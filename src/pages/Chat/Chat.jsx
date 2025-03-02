@@ -9,17 +9,18 @@ import MessageComponent from "../../components/Dialog/MessageComponent";
 import AppLayout from "../../components/Layouts/Applayouts";
 import { InputBox } from "../../components/Styles/styledComponents";
 import { grayColor, green } from "../../constants/color";
-import { NEW_MESSAGE, START_TYPING, STOP_TYPING } from "../../constants/event";
+import { NEW_MESSAGE, REFETCH_CHATS, START_TYPING, STOP_TYPING } from "../../constants/event";
 import { useError, useSocketEventHook } from "../../hooks/customHooks";
 import { useChatDetailsQuery, useGetMessagesQuery } from "../../redux/api/api";
 import { setIsFileMenu, setIsMenu } from "../../redux/slices/MiscSlice";
 import { getSocket } from "../../socket";
 import { ResetchatAlert, setmember } from "../../redux/slices/ChatSlice";
 import { skipToken } from "@reduxjs/toolkit/query";
+import { useNavigate } from "react-router-dom";
 
 const Chat = ({ chatId, user }) => {
   const dispatch = useDispatch();
-
+const navigate=useNavigate();
   // creating container Ref
   const containerref = useRef(null);
   const bottomRef = useRef(null);
@@ -49,13 +50,15 @@ const Chat = ({ chatId, user }) => {
   const socket = getSocket();
 
   // fetching chatDetails from server using chatId
-  const {data:chatDetails,isLoading,isError,error} = 
-  useChatDetailsQuery(chatId ? { chatId } : skipToken);
+  const {
+    data: chatDetails,
+    isLoading,
+    isError,
+    error,
+  } = useChatDetailsQuery(chatId ? { chatId } : skipToken);
   // useChatDetailsQuery({chatId}, {skip: !chatId });
- 
 
 
-console.log(chatDetails?.chatDetails)
   // fetching messages chunk
   const oldMessageChunks = useGetMessagesQuery({ chatId, page });
 
@@ -108,12 +111,26 @@ console.log(chatDetails?.chatDetails)
     },
     [chatId]
   );
+  const refetchChatDetails  = useCallback(
+    () => {
+      console.log("chat me call hua")
+    oldMessageChunks?.refetch()
+    console.log(oldMessageChunks.data)
+    navigate("/")
+    },
+    []
+  );
 
   const EventsObject = {
     [NEW_MESSAGE]: newMessageHandler,
     [START_TYPING]: startTypingListen,
     [STOP_TYPING]: stopTypingListen,
-  };
+    [REFETCH_CHATS]:refetchChatDetails
+
+
+  }
+
+
   useSocketEventHook(socket, EventsObject);
 
   useEffect(() => {
@@ -124,7 +141,7 @@ console.log(chatDetails?.chatDetails)
     dispatch(ResetchatAlert(chatId));
 
     return () => {
-      dispatch(setIsMenu(false))
+      dispatch(setIsMenu(false));
       setMessage("");
       setData([]);
       setallMessages([]);
@@ -133,12 +150,11 @@ console.log(chatDetails?.chatDetails)
     };
   }, [chatId]);
 
-
-  useEffect(()=>{
-if(!isLoading){
-  dispatch(setmember(chatDetails?.chatDetails?.user))
-}
-  },[chatId,chatDetails])
+  useEffect(() => {
+    if (!isLoading) {
+      dispatch(setmember(chatDetails?.chatDetails));
+    }
+  }, [chatId, chatDetails]);
   // Chating status
   const Timerref = useRef(null);
   const messagehandler = (e) => {
@@ -151,7 +167,7 @@ if(!isLoading){
     if (Timerref.current) clearTimeout(Timerref.current);
     Timerref.current = setTimeout(() => {
       socket.emit(STOP_TYPING, { members, chatId });
-    
+
       setUserTyping(false);
     }, 1000);
   };

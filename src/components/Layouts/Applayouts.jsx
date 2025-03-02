@@ -54,7 +54,11 @@ const AppLayout = () => (WrappedComponent) => {
     const newnotificationAlert = useCallback(() => {
       dispatch(NotificationCountIncrement());
     }, []);
+
+
     const RefetechList = useCallback(() => {
+
+      console.log("chatlist me call hua")
       refetch();
     }, []);
     const socketEvents = {
