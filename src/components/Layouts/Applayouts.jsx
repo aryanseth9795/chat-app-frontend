@@ -6,8 +6,8 @@ import ChatList from "../Dialog/ChatList";
 import { sampledata } from "../../constants/sampledata.js";
 import Profile from "../Common/Profile.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsMenu } from "../../redux/slices/MiscSlice.js";
-import { useMychatListQuery } from "../../redux/api/api.js";
+import { setIsMenu } from "../../Redux/slices/MiscSlice.js";
+import { useMychatListQuery } from "../../Redux/api/api.js";
 import { useError, useSocketEventHook } from "../../hooks/customHooks.jsx";
 import { getSocket } from "../../socket.jsx";
 import { useParams } from "react-router-dom";
@@ -19,7 +19,7 @@ import {
 import {
   NotificationCountIncrement,
   setChatAlert,
-} from "../../redux/slices/ChatSlice.js";
+} from "../../Redux/slices/ChatSlice.js";
 
 const AppLayout = () => (WrappedComponent) => {
   return (props) => {

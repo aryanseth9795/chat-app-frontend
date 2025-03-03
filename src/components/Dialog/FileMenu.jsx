@@ -14,8 +14,8 @@ import {
 import React, { useRef } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { useSendattachementsMutation } from "../../redux/api/api";
-import { setIsFileLoading, setIsFileMenu } from "../../redux/slices/MiscSlice";
+import { useSendattachementsMutation } from "../../Redux/api/api";
+import { setIsFileLoading, setIsFileMenu } from "../../Redux/slices/MiscSlice";
 const FileMenu = ({ anchorE1, chatId }) => {
   const dispatch = useDispatch();
   const [fileUplaoder] = useSendattachementsMutation();

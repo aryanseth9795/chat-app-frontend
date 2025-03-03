@@ -16,7 +16,7 @@ import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { VisuallyHiddenInput } from "../../components/Styles/styledComponents";
 import serverUrl, { server } from "../../constants/config";
-import { userexist, userNotexist } from "../../redux/slices/AuthSlice";
+import { userexist, userNotexist } from "../../Redux/slices/AuthSlice";
 import { usernameValidation } from "../../utils/validation";
 const Login = () => {
   const dispatch = useDispatch();

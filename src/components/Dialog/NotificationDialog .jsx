@@ -13,10 +13,10 @@ import React, { memo, useState } from "react";
 import {
   useFriendRequestAcceptorMutation,
   useGetNotificationQuery,
-} from "../../redux/api/api";
+} from "../../Redux/api/api";
 import { useError } from "../../hooks/customHooks";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsNotification } from "../../redux/slices/MiscSlice";
+import { setIsNotification } from "../../Redux/slices/MiscSlice";
 import toast from "react-hot-toast";
 
 const NotificationDialog = () => {

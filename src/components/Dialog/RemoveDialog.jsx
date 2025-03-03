@@ -5,7 +5,7 @@ import {
   useAddingroupMutation,
   useAddMembersListInGrpQuery,
   useRemoveingroupMutation,
-} from "../../redux/api/api";
+} from "../../Redux/api/api";
 import toast from "react-hot-toast";
 
 const RemoveDialog = ({ members, chatId, setdelDialog }) => {

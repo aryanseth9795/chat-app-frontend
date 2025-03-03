@@ -12,12 +12,12 @@ import {
 import React, { useEffect, useState } from "react";
 import UserItem from "../Common/UserItem";
 
-import { setIsSearch } from "../../redux/slices/MiscSlice";
+import { setIsSearch } from "../../Redux/slices/MiscSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
   useFriendRequestSendMutation,
   useLazySearchUserQuery,
-} from "../../redux/api/api";
+} from "../../Redux/api/api";
 import { useInputValidation } from "6pp";
 import toast from "react-hot-toast";
 import { useAsyncMutation } from "../../hooks/customHooks";

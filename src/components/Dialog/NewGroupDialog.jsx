@@ -12,13 +12,13 @@ import {
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { sampleUsers } from "../../constants/sampledata";
-import { setIsNewGroup } from "../../redux/slices/MiscSlice";
+import { setIsNewGroup } from "../../Redux/slices/MiscSlice";
 import UserItem from "../Common/UserItem";
 import toast from "react-hot-toast";
 import {
   useCreategroupMutation,
   useGetMembersforAddinGroupsQuery,
-} from "../../redux/api/api";
+} from "../../Redux/api/api";
 import { useError } from "../../hooks/customHooks";
 
 const NewGroupDialog = () => {

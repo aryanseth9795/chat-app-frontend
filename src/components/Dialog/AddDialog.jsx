@@ -4,7 +4,7 @@ import UserItem from "../Common/UserItem";
 import {
   useAddingroupMutation,
   useAddMembersListInGrpQuery,
-} from "../../redux/api/api";
+} from "../../Redux/api/api";
 import toast from "react-hot-toast";
 
 const AddDialog = ({ open,

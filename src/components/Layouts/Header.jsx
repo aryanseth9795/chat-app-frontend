@@ -31,20 +31,20 @@ import axios from "axios";
 import serverUrl from "../../constants/config";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { userNotexist } from "../../redux/slices/AuthSlice";
+import { userNotexist } from "../../Redux/slices/AuthSlice";
 import {
   setIsInfo,
   setIsMenu,
   setIsNewGroup,
   setIsNotification,
   setIsSearch,
-} from "../../redux/slices/MiscSlice";
+} from "../../Redux/slices/MiscSlice";
 import { getSocket } from "../../socket";
-import { NotificationReset, setmember } from "../../redux/slices/ChatSlice";
+import { NotificationReset, setmember } from "../../Redux/slices/ChatSlice";
 import { useParams } from "react-router-dom";
 import AvatarCard from "../Common/AvatarCard";
 import { useAsyncMutation } from "../../hooks/customHooks";
-import { useDeleteChatMutation } from "../../redux/api/api";
+import { useDeleteChatMutation } from "../../Redux/api/api";
 import Person2Icon from "@mui/icons-material/Person2";
 //calling lazy components
 const NewGroupDialog = lazy(() => import("../Dialog/NewGroupDialog"));

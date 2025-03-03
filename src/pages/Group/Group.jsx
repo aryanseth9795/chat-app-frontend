@@ -33,7 +33,7 @@ import {
   useGroupDetailsQuery,
   useMyGroupsQuery,
   useRenamegroupMutation,
-} from "../../redux/api/api.js";
+} from "../../Redux/api/api.js";
 import { getSocket } from "../../socket.jsx";
 import { REFETCH_CHATS } from "../../constants/event.js";
 

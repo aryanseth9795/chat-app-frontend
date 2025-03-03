@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsInfo } from "../../redux/slices/MiscSlice";
+import { setIsInfo } from "../../Redux/slices/MiscSlice";
 
 const Info = ({ user }) => {
   const dispatch = useDispatch();

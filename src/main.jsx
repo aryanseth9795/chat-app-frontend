@@ -3,7 +3,7 @@ import App from "./App.jsx";
 import { CssBaseline } from "@mui/material";
 import { Provider } from "react-redux";
 import { HelmetProvider } from "react-helmet-async";
-import Store from './redux/store.js'
+import Store from './Redux/store.js'
 import {Toaster} from 'react-hot-toast'
 ReactDOM.createRoot(document.getElementById("root")).render(
   <>

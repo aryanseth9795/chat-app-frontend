@@ -11,10 +11,10 @@ import { InputBox } from "../../components/Styles/styledComponents";
 import { grayColor, green } from "../../constants/color";
 import { NEW_MESSAGE, REFETCH_CHATS, START_TYPING, STOP_TYPING } from "../../constants/event";
 import { useError, useSocketEventHook } from "../../hooks/customHooks";
-import { useChatDetailsQuery, useGetMessagesQuery } from "../../redux/api/api";
-import { setIsFileMenu, setIsMenu } from "../../redux/slices/MiscSlice";
+import { useChatDetailsQuery, useGetMessagesQuery } from "../../Redux/api/api";
+import { setIsFileMenu, setIsMenu } from "../../Redux/slices/MiscSlice";
 import { getSocket } from "../../socket";
-import { ResetchatAlert, setmember } from "../../redux/slices/ChatSlice";
+import { ResetchatAlert, setmember } from "../../Redux/slices/ChatSlice";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useNavigate } from "react-router-dom";
 

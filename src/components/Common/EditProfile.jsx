@@ -14,8 +14,8 @@ import {
 import React from "react";
 import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { useUpdateProfileMutation } from "../../redux/api/api";
-import { userexist } from "../../redux/slices/AuthSlice";
+import { useUpdateProfileMutation } from "../../Redux/api/api";
+import { userexist } from "../../Redux/slices/AuthSlice";
 import { usernameValidation } from "../../utils/validation";
 import { VisuallyHiddenInput } from "../Styles/styledComponents";
 
