@@ -20,20 +20,22 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React, { Suspense, lazy, memo, useEffect, useState } from "react";
+import React, { Suspense, lazy, memo, useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import AvatarCard from "../../components/Common/AvatarCard.jsx";
 import UserItem from "../../components/Common/UserItem.jsx";
 import { Link } from "../../components/Styles/styledComponents";
 import { bgGradient, green, matBlack } from "../../constants/color";
-import { useError } from "../../hooks/customHooks.jsx";
+import { useError, useSocketEventHook } from "../../hooks/customHooks.jsx";
 import {
   useDeletegroupMutation,
   useGroupDetailsQuery,
   useMyGroupsQuery,
   useRenamegroupMutation,
 } from "../../redux/api/api.js";
+import { getSocket } from "../../socket.jsx";
+import { REFETCH_CHATS } from "../../constants/event.js";
 
 const Group = () => {
   const navigate = useNavigate();
@@ -78,9 +80,9 @@ const Group = () => {
 
       if (delres?.data?.success) {
         toast.success(delres?.data?.message, { id: tid });
-        // refetch();
-        // grpRefetch();
-        navigate("/groups", { replace: true });
+       mygrpRefetch();
+        grpRefetch();
+        navigate("/", { replace: true });
         console.log(grpdetails)
       }
       if (delres?.error?.data?.success)
@@ -96,6 +98,21 @@ const Group = () => {
     setisAdded(true);
   };
 
+const socket=getSocket();
+
+const refetcher=useCallback(()=>{
+  mygrpRefetch();
+  grpRefetch()
+},[])
+const grouplisten={[REFETCH_CHATS]:refetcher}
+
+
+useSocketEventHook(socket,grouplisten)
+
+
+
+
+
   useEffect(() => {
     return () => {
       setisMobile(false);
@@ -106,7 +123,7 @@ const Group = () => {
   }, [chatId]);
 
   // Fetching Data
-  const { data: groupchatList, isLoading, error, isError ,refetch} = useMyGroupsQuery();
+  const { data: groupchatList, isLoading, error, isError ,refetch:mygrpRefetch} = useMyGroupsQuery();
 
   const {
     data: grpdetails,

@@ -5,7 +5,8 @@ const initialState = {
   isNotification:false,
   isFileMenu:false,
   isFileLoading:false,
-  isNewGroup:false
+  isNewGroup:false,
+  isInfo:false
 };
 
 const MiscSlice = createSlice({
@@ -33,7 +34,10 @@ const MiscSlice = createSlice({
     setIsNewGroup: (state, action) => {
       state.isNewGroup = action.payload;
     },
+    setIsInfo: (state, action) => {
+      state.isInfo = action.payload;
+    },
   },
 });
-export const { setIsMenu ,setIsSearch,setIsNotification,setIsFileMenu, setIsFileLoading,setIsNewGroup} = MiscSlice.actions;
+export const { setIsMenu ,setIsSearch,setIsNotification,setIsFileMenu, setIsFileLoading,setIsNewGroup,setIsInfo} = MiscSlice.actions;
 export default MiscSlice;

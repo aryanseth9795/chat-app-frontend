@@ -8,20 +8,24 @@ import {
   Backdrop,
   Badge,
   Stack,
+  Menu,
+  MenuItem,
+  MenuList,
+  ListItemText,
 } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Add as AddIcon,
-  Menu,
+  Menu as MenuIcon,
   Search as SearchIcon,
   Group as GroupIcon,
   Logout as LogoutIcon,
   Notifications as NotificationsIcon,
 } from "@mui/icons-material";
 import { green, black } from "../../constants/color";
-import { useState, Suspense, lazy } from "react";
+import { useState, Suspense, lazy, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import serverUrl from "../../constants/config";
@@ -29,6 +33,7 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { userNotexist } from "../../redux/slices/AuthSlice";
 import {
+  setIsInfo,
   setIsMenu,
   setIsNewGroup,
   setIsNotification,
@@ -40,18 +45,31 @@ import { useParams } from "react-router-dom";
 import AvatarCard from "../Common/AvatarCard";
 import { useAsyncMutation } from "../../hooks/customHooks";
 import { useDeleteChatMutation } from "../../redux/api/api";
-
+import Person2Icon from "@mui/icons-material/Person2";
 //calling lazy components
 const NewGroupDialog = lazy(() => import("../Dialog/NewGroupDialog"));
 const NotificationDialog = lazy(() => import("../Dialog/NotificationDialog "));
 const SearchDialog = lazy(() => import("../Dialog/SearchDialog"));
-
+const Info = lazy(() => import("../Dialog/Info"));
+const EditProfile=lazy(()=>import("../Common/EditProfile"))
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const param = useParams();
 
-  const { isSearch, isNotification, isNewGroup } = useSelector(
+  const [menuAnchor1, setMenuAnchor1] = useState(null);
+  // const MenuRef = useRef(null);
+  const [threedotMenu, setthreeDot] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+
+  const threeDotMenuHandler = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    // setMenuAnchor1(event.currentTarget)
+    setthreeDot(true);
+  };
+
+  const { isSearch, isNotification, isNewGroup, isInfo } = useSelector(
     (state) => state.Misc
   );
   const { NotificationCount, member } = useSelector((state) => state.Chat);
@@ -84,6 +102,7 @@ const Header = () => {
       if (res) {
         console.log(res);
         socket.disconnect();
+        dispatch(setmember(null));
       }
       dispatch(userNotexist());
       toast.success(res?.data?.message);
@@ -100,13 +119,14 @@ const Header = () => {
     navigate("/");
     dispatch(setmember(null));
   };
-  const IconBtn = ({ title, icon, onClick, value }) => {
+  const IconBtn = ({ title, icon, onClick, value, ...props }) => {
     return (
       <Tooltip title={title}>
         <IconButton
           color="inherit"
           onClick={onClick}
           sx={{ fontSize: { xs: "small", sm: "large" } }}
+          {...props}
         >
           {value ? (
             <Badge badgeContent={value} color="error">
@@ -119,112 +139,135 @@ const Header = () => {
       </Tooltip>
     );
   };
+  const AllMenuIcon = (
+    <Box>
+      <IconBtn title={"Search"} icon={<SearchIcon />} onClick={openSearch} />
+
+      <IconBtn title={"New Group"} icon={<AddIcon />} onClick={openNewGroup} />
+
+      <IconBtn
+        title={"Manage Groups"}
+        icon={<GroupIcon />}
+        onClick={navigateToGroup}
+      />
+
+      <IconBtn
+        title={"My Profile"}
+        icon={<Person2Icon />}
+        onClick={()=>setIsEdit(true)}
+      />
+
+      <IconBtn
+        title={"Notifications"}
+        icon={<NotificationsIcon />}
+        onClick={openNotification}
+        value={NotificationCount}
+      />
+
+      <IconBtn title={"Logout"} icon={<LogoutIcon />} onClick={logoutHandler} />
+    </Box>
+  );
   return (
     <Suspense fallback={<Backdrop open />}>
       <>
-        <Box sx={{ flexGrow: 1 }} height={{ xs: "3rem", sm: "4rem" }}>
+        <Box sx={{ flexGrow: 1 }} height={"4rem"}>
           <AppBar position="static" sx={{ bgcolor: green }}>
             <>
               <Toolbar>
-                <Box sx={{ display: { sx: "block", sm: "none" } }}>
-                  <IconButton color="inherit" onClick={handleMenuBar}>
-                    <Menu />
-                  </IconButton>
-                </Box>
-
-                <Box
-                  gap={"2rem"}
-                  display={"flex"}
-                  flexDirection={"row"}
-                  alignContent={"center"}
-                  sx={{ paddingLeft: { sm: "25rem" } }}
+                <Stack
+                  direction={"row"}
+                  alignItems={"center"}
+                  spacing={"0.5rem"}
+                  width={{ xs: "10%", sm: "25%" }}
                 >
-                  <Box
-                    position={"relative"}
-                    display={member ? "block" : "none"}
-                  >
-                    <AvatarCard
-                      avatar={
-                        member?.groupChat
-                          ? member.avatar
-                          : member?.avatar
-                          ? [member?.avatar]
-                          : [""]
-                      }
-                      pheight="1.5rem"
-                      pwidth="1.5rem"
-                      height="2rem"
-                      width="2rem"
-                    />
+                  <Box sx={{ display: { sx: "block", sm: "none" } }}>
+                    <IconButton color="inherit" onClick={handleMenuBar}>
+                      <MenuIcon />
+                    </IconButton>
                   </Box>
                   <Box>
                     <Typography
                       sx={{
                         color: black,
                         typography: { xs: "body2", sm: "h4" },
-                        paddingLeft: "2rem",
+                        display: { xs: "none", sm: "block" },
                       }}
                       justifyContent={"center"}
                     >
-                      {member?.name ? member.name : "ChatsApp"}
+                      {"ChatsApp"}
                     </Typography>
                   </Box>
-                </Box>
-                <Box sx={{ flexGrow: 1 }}> </Box>
-                <Box display={param?.id ? "none" : "block"}>
-                  <IconBtn
-                    title={"Search"}
-                    icon={<SearchIcon />}
-                    onClick={openSearch}
-                  />
+                </Stack>
+                {member ? (
+                  <></>
+                ) : (
+                  <Box display={{ xs: "flex", sm: "none" }}>ChatsApp</Box>
+                )}
+                <Box
+                  sx={{ flexGrow: 1 }}
+                  display={member ? "none" : "block"}
+                ></Box>
 
-                  <IconBtn
-                    title={"New Group"}
-                    icon={<AddIcon />}
-                    onClick={openNewGroup}
+                <Stack
+                  direction={"row"}
+                  display={member ? "flex" : "none"}
+                  position={"relative"}
+                  spacing={"3rem"}
+                  alignItems={"center"}
+                  width={{ xs: "80%", sm: "50%" }}
+                  justifyContent={"space-between"}
+                >
+                  <AvatarCard
+                    avatar={
+                      member?.groupChat
+                        ? member.avatar
+                        : member?.avatar
+                        ? [member?.avatar]
+                        : [""]
+                    }
+                    pheight="1.5rem"
+                    pwidth="1.5rem"
+                    height="2rem"
+                    width="2rem"
                   />
+                  <Box>
+                    <Typography>{member?.name}</Typography>
+                  </Box>
 
-                  <IconBtn
-                    title={"Manage Groups"}
-                    icon={<GroupIcon />}
-                    onClick={navigateToGroup}
-                  />
+                  <Box display={member ? "flex" : "none"}>
+                    <IconBtn
+                      title={"Delete"}
+                      icon={<DeleteIcon />}
+                      onClick={DeleteChat}
+                      disabled={isLoading}
+                    />
 
-                  <IconBtn
-                    title={"Notifications"}
-                    icon={<NotificationsIcon />}
-                    onClick={openNotification}
-                    value={NotificationCount}
-                  />
-
-                  <IconBtn
-                    title={"Logout"}
-                    icon={<LogoutIcon />}
-                    onClick={logoutHandler}
-                  />
-                </Box>
-
-                <Box display={param?.id ? "block" : "none"}>
-                  <IconBtn
-                    title={"Delete"}
-                    icon={<DeleteIcon />}
-                    onClick={DeleteChat}
-                    disabled={isLoading}
-                  />
-
-                  <IconBtn
-                    title={"Info"}
-                    icon={<InfoIcon />}
-                    onClick={openNotification}
-                    value={NotificationCount}
-                  />
-
+                    <IconBtn
+                      title={"Info"}
+                      icon={<InfoIcon />}
+                      onClick={() => dispatch(setIsInfo(true))}
+                    />
+                  </Box>
+                </Stack>
+                <Stack
+                  display={{ xs: "none", sm: "flex" }}
+                  width={"25%"}
+                  direction={"row"}
+                  justifyContent={"flex-end"}
+                >
+                  {AllMenuIcon}
+                </Stack>
+                <Stack
+                  display={{ xs: "flex", sm: "none" }}
+                  justifyContent={"end"}
+                  width={"10%"}
+                >
                   <IconBtn
                     title={"Menu"}
                     icon={<MoreVertIcon />}
-                    onClick={logoutHandler}
+                    onClick={threeDotMenuHandler}
                   />
-                </Box>
+                </Stack>
               </Toolbar>
             </>
           </AppBar>
@@ -247,6 +290,43 @@ const Header = () => {
             <NewGroupDialog />
           </Suspense>
         )}
+
+        {isInfo && (
+          <Suspense fallback={<Backdrop open />}>
+            <Info user={member} />
+          </Suspense>
+        )}
+
+        {isEdit && (
+          <Suspense fallback={<Backdrop open={true} />}>
+            <EditProfile isEdit={isEdit} setIsEdit={setIsEdit} />
+          </Suspense>
+        )}
+
+        <Menu
+          open={threedotMenu}
+          anchorEl={menuAnchor1}
+          onClose={() => setthreeDot(false)}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              height: "4rem",
+              width: "15rem",
+            }}
+          >
+            <MenuList>{AllMenuIcon}</MenuList>
+          </div>
+        </Menu>
       </>
     </Suspense>
   );
