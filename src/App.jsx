@@ -39,7 +39,7 @@ function App() {
     // Check if token exists in cookies
       fetchfunc();
     
-  }, [dispatch]);
+  }, [dispatch,user]);
 
   return (
     <>
