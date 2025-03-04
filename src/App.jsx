@@ -28,8 +28,9 @@ function App() {
 
   useEffect(() => {
     // Check if token exists in cookies
-  
+  console.log("yha tk called hua")
     const token = getCookie("token");
+    console.log(token)
     if (token) {
       const fetchfunc = async () => {
         try {
