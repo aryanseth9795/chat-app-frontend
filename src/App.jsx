@@ -20,35 +20,25 @@ function App() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.Auth);
 
-  const getCookie = (name) => {
-    const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
-    return match ? match[2] : null;
-  };
+ 
+  const fetchfunc = async () => {
+    try {
+      const userdetail = await axios.get(`${serverUrl}/users/me`, {
+        withCredentials: true,
+      });
 
+      dispatch(userexist(userdetail?.data?.user));
+      dispatch(setNotificationCount(userdetail?.data?.user?.notificationCount))   
+    } catch (error) {
+      dispatch(userNotexist());
+      // toast.error(error?.response?.data?.message);
+    }
+  };
 
   useEffect(() => {
     // Check if token exists in cookies
-  console.log("yha tk called hua")
-    const token = getCookie("token");
-    console.log(token)
-    console.log(document.cookie)
-    if (token) {
-      const fetchfunc = async () => {
-        try {
-          const userdetail = await axios.get(`${serverUrl}/users/me`, {
-            withCredentials: true,
-          });
-
-          dispatch(userexist(userdetail?.data?.user));
-          dispatch(setNotificationCount(userdetail?.data?.user?.notificationCount))   
-        } catch (error) {
-          dispatch(userNotexist());
-          toast.error(error?.response?.data?.message);
-        }
-      };
-
       fetchfunc();
-    }
+    
   }, [dispatch]);
 
   return (
