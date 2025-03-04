@@ -3,7 +3,7 @@ import Title from "../Common/Title";
 import Header from "./Header";
 import { Grid, Drawer, Skeleton } from "@mui/material";
 import ChatList from "../Dialog/ChatList";
-import { sampledata } from "../../constants/sampledata.js";
+
 import Profile from "../Common/Profile.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsMenu } from "../../Redux/slices/MiscSlice.js";
@@ -57,10 +57,11 @@ const AppLayout = () => (WrappedComponent) => {
 
 
     const RefetechList = useCallback(() => {
-
-      console.log("chatlist me call hua")
       refetch();
     }, []);
+
+
+    
     const socketEvents = {
       [NEW_MESSAGE_ALERT]: newMessageAlert,
       [NEW_NOTIFICATION_ALERT]: newnotificationAlert,
