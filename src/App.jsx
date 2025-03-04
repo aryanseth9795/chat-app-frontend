@@ -31,6 +31,7 @@ function App() {
   console.log("yha tk called hua")
     const token = getCookie("token");
     console.log(token)
+    console.log(document.cookie)
     if (token) {
       const fetchfunc = async () => {
         try {
