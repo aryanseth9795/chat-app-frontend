@@ -47,7 +47,7 @@ function App() {
 
       fetchfunc();
     }
-  }, [dispatch, token]);
+  }, [dispatch]);
 
   return (
     <>
