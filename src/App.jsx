@@ -19,10 +19,17 @@ const Group = lazy(() => import("./pages/Group/Group"));
 function App() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.Auth);
-  const token = document.cookie.includes("token");
+
+  const getCookie = (name) => {
+    const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+    return match ? match[2] : null;
+  };
+
+
   useEffect(() => {
     // Check if token exists in cookies
-
+  
+    const token = getCookie("token");
     if (token) {
       const fetchfunc = async () => {
         try {
