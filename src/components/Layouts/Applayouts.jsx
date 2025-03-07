@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Title from "../Common/Title";
 import Header from "./Header";
 import { Grid, Drawer, Skeleton } from "@mui/material";
@@ -15,6 +15,8 @@ import {
   NEW_NOTIFICATION_ALERT,
   NEW_MESSAGE_ALERT,
   REFETCH_CHATS,
+  ONLINE_USERS,
+  REFETCH_ONLINE_USER,
 } from "../../constants/event.js";
 import {
   NotificationCountIncrement,
@@ -32,6 +34,17 @@ const AppLayout = () => (WrappedComponent) => {
     const { chatAlert } = useSelector((state) => state.Chat);
 
     const { data, error, isError, isLoading, refetch } = useMychatListQuery();
+
+    const member = data?.chats?.flatMap((user) => user?.members);
+    const [online, setOnline] = useState([]);
+
+    useEffect(() => {
+      if (!isLoading) {
+        socket.emit(ONLINE_USERS, { member });
+        socket.emit(REFETCH_ONLINE_USER, { member });
+          //  console.log(onlineMembers)
+      }
+    }, [data]);
 
     useError([{ isError, error }]);
 
@@ -55,17 +68,26 @@ const AppLayout = () => (WrappedComponent) => {
       dispatch(NotificationCountIncrement());
     }, []);
 
-
     const RefetechList = useCallback(() => {
       refetch();
     }, []);
 
+    const OnlineUserList = useCallback(({ onlineMembers }) => {
+      console.log(onlineMembers, "first time fetch");
+   
+      setOnline(onlineMembers);
+    }, []);
 
-    
+    const RefectchOnlineUserList = useCallback(() => {
+      socket.emit(ONLINE_USERS, { member });
+    }, []);
+
     const socketEvents = {
       [NEW_MESSAGE_ALERT]: newMessageAlert,
       [NEW_NOTIFICATION_ALERT]: newnotificationAlert,
       [REFETCH_CHATS]: RefetechList,
+      [ONLINE_USERS]: OnlineUserList,
+      [REFETCH_ONLINE_USER]: RefectchOnlineUserList,
     };
 
     useSocketEventHook(socket, socketEvents);
@@ -100,7 +122,7 @@ const AppLayout = () => (WrappedComponent) => {
               <ChatList
                 chats={data?.chats}
                 chatId={param.id}
-                onlineusers={["1", "2"]}
+                onlineusers={online}
                 handleDeleteChat={handleDeleteChat}
                 newMessageAlert={chatAlert}
               />
@@ -140,7 +162,7 @@ const AppLayout = () => (WrappedComponent) => {
             <ChatList
               chats={data?.chats}
               chatId={param.id}
-              onlineusers={["1", "2"]}
+              onlineusers={online}
               handleDeleteChat={handleDeleteChat}
               newMessageAlert={chatAlert}
             />

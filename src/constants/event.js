@@ -15,5 +15,8 @@ export const STOP_TYPING = "STOP_TYPING";
 export const CHAT_JOINED = "CHAT_JOINED";
 export const CHAT_LEAVED = "CHAT_LEAVED";
 
-export const ONLINE_USERS = "ONLINE_USERS";
 
+export const PROFILE_UPDATED="PROFILE_UPDATED";
+
+export const ONLINE_USERS="ONLINE_USERS";
+export const REFETCH_ONLINE_USER="REFETCH_ONLINE_USER";

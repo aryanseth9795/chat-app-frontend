@@ -96,7 +96,7 @@ const Header = () => {
   };
   const logoutHandler = async () => {
     try {
-      const res = await axios.get(`${serverUrl}/users/logout`, {
+      const res = await axios.get(`${serverUrl}/users/logout`,{
         withCredentials: true,
       });
       if (res) {

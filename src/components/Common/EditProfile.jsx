@@ -14,13 +14,23 @@ import {
 import React from "react";
 import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { useUpdateProfileMutation } from "../../Redux/api/api";
+import { useMychatListQuery, useUpdateProfileMutation } from "../../Redux/api/api";
 import { userexist } from "../../Redux/slices/AuthSlice";
 import { usernameValidation } from "../../utils/validation";
 import { VisuallyHiddenInput } from "../Styles/styledComponents";
+import { getSocket } from "../../socket";
+import { PROFILE_UPDATED } from "../../constants/event";
 
 const EditProfile = ({ isEdit, setIsEdit }) => {
   const { user } = useSelector((state) => state.Auth);
+const {data:chatList}=useMychatListQuery();
+
+
+const member=chatList?.chats?.flatMap((user)=>(user?.members));
+
+
+const socket=getSocket();
+
 
   const dispatch = useDispatch();
   
@@ -48,6 +58,8 @@ const EditProfile = ({ isEdit, setIsEdit }) => {
       if (res?.data) {
         toast.success(res?.data?.message, { id: updatetoastid });
         dispatch(userexist(res?.data?.newUser));
+       socket.emit(PROFILE_UPDATED,{member})
+    
       } else {
         console.error(res?.error?.data?.message);
         toast.error(res?.error?.data?.message, { id: updatetoastid });

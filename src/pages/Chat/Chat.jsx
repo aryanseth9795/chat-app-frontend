@@ -9,7 +9,12 @@ import MessageComponent from "../../components/Dialog/MessageComponent";
 import AppLayout from "../../components/Layouts/Applayouts";
 import { InputBox } from "../../components/Styles/styledComponents";
 import { grayColor, green } from "../../constants/color";
-import { NEW_MESSAGE, REFETCH_CHATS, START_TYPING, STOP_TYPING } from "../../constants/event";
+import {
+  NEW_MESSAGE,
+  REFETCH_CHATS,
+  START_TYPING,
+  STOP_TYPING,
+} from "../../constants/event";
 import { useError, useSocketEventHook } from "../../hooks/customHooks";
 import { useChatDetailsQuery, useGetMessagesQuery } from "../../Redux/api/api";
 import { setIsFileMenu, setIsMenu } from "../../Redux/slices/MiscSlice";
@@ -20,7 +25,7 @@ import { useNavigate } from "react-router-dom";
 
 const Chat = ({ chatId, user }) => {
   const dispatch = useDispatch();
-const navigate=useNavigate();
+  const navigate = useNavigate();
   // creating container Ref
   const containerref = useRef(null);
   const bottomRef = useRef(null);
@@ -53,11 +58,10 @@ const navigate=useNavigate();
   const {
     data: chatDetails,
     isLoading,
-    isError,
-    error,
+    isError: chatDetailsisError,
+    error: chatDetailserror,
   } = useChatDetailsQuery(chatId ? { chatId } : skipToken);
   // useChatDetailsQuery({chatId}, {skip: !chatId });
-
 
   // fetching messages chunk
   const oldMessageChunks = useGetMessagesQuery({ chatId, page });
@@ -73,7 +77,7 @@ const navigate=useNavigate();
 
   // handling all error
   useError([
-    { isError: chatDetails?.isError, error: chatDetails?.error },
+    { isError: chatDetailsisError, error: chatDetailserror },
     {
       isError: oldMessageChunks?.isError,
       error: oldMessageChunks?.error,
@@ -111,25 +115,17 @@ const navigate=useNavigate();
     },
     [chatId]
   );
-  const refetchChatDetails  = useCallback(
-    () => {
-      console.log("chat me call hua")
-    oldMessageChunks?.refetch()
-    console.log(oldMessageChunks.data)
-    navigate("/")
-    },
-    []
-  );
+  const refetchChatDetails = useCallback(() => {
+    oldMessageChunks?.refetch();
+    navigate("/");
+  }, []);
 
   const EventsObject = {
     [NEW_MESSAGE]: newMessageHandler,
     [START_TYPING]: startTypingListen,
     [STOP_TYPING]: stopTypingListen,
-    [REFETCH_CHATS]:refetchChatDetails
-
-
-  }
-
+    [REFETCH_CHATS]: refetchChatDetails,
+  };
 
   useSocketEventHook(socket, EventsObject);
 
