@@ -42,7 +42,6 @@ const AppLayout = () => (WrappedComponent) => {
       if (!isLoading) {
         socket.emit(ONLINE_USERS, { member });
         socket.emit(REFETCH_ONLINE_USER, { member });
-          //  console.log(onlineMembers)
       }
     }, [data]);
 
@@ -72,14 +71,12 @@ const AppLayout = () => (WrappedComponent) => {
       refetch();
     }, []);
 
-    const OnlineUserList = useCallback(({ onlineMembers }) => {
-      console.log(onlineMembers, "first time fetch");
-   
-      setOnline(onlineMembers);
+    const OnlineUserList = useCallback(({ onlineMembersset}) => {
+      setOnline(onlineMembersset);
     }, []);
 
     const RefectchOnlineUserList = useCallback(() => {
-      socket.emit(ONLINE_USERS, { member });
+      socket.emit(REFETCH_ONLINE_USER)
     }, []);
 
     const socketEvents = {
