@@ -51,7 +51,7 @@ const NewGroupDialog = lazy(() => import("../Dialog/NewGroupDialog"));
 const NotificationDialog = lazy(() => import("../Dialog/NotificationDialog "));
 const SearchDialog = lazy(() => import("../Dialog/SearchDialog"));
 const Info = lazy(() => import("../Dialog/Info"));
-const EditProfile=lazy(()=>import("../Common/EditProfile"))
+const EditProfile = lazy(() => import("../Common/EditProfile"));
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -72,9 +72,15 @@ const Header = () => {
   const { isSearch, isNotification, isNewGroup, isInfo } = useSelector(
     (state) => state.Misc
   );
-  const { NotificationCount, member } = useSelector((state) => state.Chat);
+  const { NotificationCount, member, OnlineUser } = useSelector(
+    (state) => state.Chat
+  );
 
   const socket = getSocket();
+
+  const isOnline = member?.members?.some((memeber) =>
+    OnlineUser.includes(memeber)
+  );
 
   const handleMenuBar = () => {
     dispatch(setIsMenu(true));
@@ -96,11 +102,10 @@ const Header = () => {
   };
   const logoutHandler = async () => {
     try {
-      const res = await axios.get(`${serverUrl}/users/logout`,{
+      const res = await axios.get(`${serverUrl}/users/logout`, {
         withCredentials: true,
       });
       if (res) {
-        console.log(res);
         socket.disconnect();
         dispatch(setmember(null));
       }
@@ -154,7 +159,7 @@ const Header = () => {
       <IconBtn
         title={"My Profile"}
         icon={<Person2Icon />}
-        onClick={()=>setIsEdit(true)}
+        onClick={() => setIsEdit(true)}
       />
 
       <IconBtn
@@ -232,6 +237,7 @@ const Header = () => {
                   />
                   <Box>
                     <Typography>{member?.name}</Typography>
+                    {isOnline ? "Online" : ""}
                   </Box>
 
                   <Box display={member ? "flex" : "none"}>

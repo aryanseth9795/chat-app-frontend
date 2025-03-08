@@ -21,6 +21,7 @@ import {
 import {
   NotificationCountIncrement,
   setChatAlert,
+  setOnlineUser,
 } from "../../Redux/slices/ChatSlice.js";
 
 const AppLayout = () => (WrappedComponent) => {
@@ -31,12 +32,13 @@ const AppLayout = () => (WrappedComponent) => {
     const chatId = param?.id;
     const { isMobile } = useSelector((state) => state.Misc);
     const { user } = useSelector((state) => state.Auth);
-    const { chatAlert } = useSelector((state) => state.Chat);
+    const { chatAlert,OnlineUser } = useSelector((state) => state.Chat);
 
     const { data, error, isError, isLoading, refetch } = useMychatListQuery();
 
     const member = data?.chats?.flatMap((user) => user?.members);
-    const [online, setOnline] = useState([]);
+   
+
 
     useEffect(() => {
       if (!isLoading) {
@@ -72,7 +74,8 @@ const AppLayout = () => (WrappedComponent) => {
     }, []);
 
     const OnlineUserList = useCallback(({ onlineMembersset}) => {
-      setOnline(onlineMembersset);
+      dispatch(setOnlineUser(onlineMembersset))
+      
     }, []);
 
     const RefectchOnlineUserList = useCallback(() => {
@@ -119,7 +122,7 @@ const AppLayout = () => (WrappedComponent) => {
               <ChatList
                 chats={data?.chats}
                 chatId={param.id}
-                onlineusers={online}
+                onlineusers={OnlineUser}
                 handleDeleteChat={handleDeleteChat}
                 newMessageAlert={chatAlert}
               />
@@ -159,7 +162,7 @@ const AppLayout = () => (WrappedComponent) => {
             <ChatList
               chats={data?.chats}
               chatId={param.id}
-              onlineusers={online}
+              onlineusers={OnlineUser}
               handleDeleteChat={handleDeleteChat}
               newMessageAlert={chatAlert}
             />

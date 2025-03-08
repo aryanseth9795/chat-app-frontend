@@ -2,8 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   NotificationCount: 0,
-member:null,
+  member: null,
   chatAlert: [],
+  OnlineUser: [],
 };
 const ChatSlice = createSlice({
   name: "Chat",
@@ -30,16 +31,18 @@ const ChatSlice = createSlice({
         state.chatAlert.push({ chatId: action.payload.chatId, alertCount: 1 });
       }
     },
+
     ResetchatAlert: (state, action) => {
       state.chatAlert = state.chatAlert.filter(
         (item) => item.chatId !== action.payload
       );
-      
     },
     setmember: (state, action) => {
-      state.member = action.payload
-      
-  },
+      state.member = action.payload;
+    },
+    setOnlineUser: (state, action) => {
+      state.OnlineUser = action.payload;
+    },
   },
 });
 
@@ -49,6 +52,7 @@ export const {
   NotificationReset,
   setChatAlert,
   ResetchatAlert,
-  setmember
+  setmember,
+  setOnlineUser
 } = ChatSlice.actions;
 export default ChatSlice;
