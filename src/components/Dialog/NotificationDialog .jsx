@@ -1,23 +1,23 @@
 import {
-  Dialog,
-  DialogTitle,
-  Typography,
-  Stack,
-  ListItem,
   Avatar,
   Button,
+  Dialog,
+  DialogTitle,
+  ListItem,
   Skeleton,
+  Stack,
+  Typography,
 } from "@mui/material";
-import React, { memo, useState } from "react";
+import React, { memo } from "react";
 
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 import {
   useFriendRequestAcceptorMutation,
   useGetNotificationQuery,
 } from "../../Redux/api/api";
-import { useError } from "../../hooks/customHooks";
-import { useDispatch, useSelector } from "react-redux";
 import { setIsNotification } from "../../Redux/slices/MiscSlice";
-import toast from "react-hot-toast";
+import { useError } from "../../hooks/customHooks";
 
 const NotificationDialog = () => {
   const dispatch = useDispatch();
@@ -27,7 +27,7 @@ const NotificationDialog = () => {
   
     try {
       const res = await acceptRequest({ requestId: _id, accept });
-      console.log(res);
+   
       if (res?.data?.success) {
         // socket used
         toast.success(res?.data?.message);
@@ -46,7 +46,7 @@ const NotificationDialog = () => {
   };
   const { isLoading, data, isError, error } = useGetNotificationQuery();
   useError([{ isError, error }]);
-  console.log(data);
+
 
   return (
     <Dialog open={isNotification} onClose={NotificationdialogClose}>

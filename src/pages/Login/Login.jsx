@@ -28,7 +28,7 @@ const Login = () => {
   const password = useInputValidation();
   const username = useInputValidation("", usernameValidation);
   const email = useInputValidation();
-  const avatar = useFileHandler("single");
+  const avatar = useFileHandler("single",20);
 
   const isServerOnline = async () => {
     const checkId = toast.loading(

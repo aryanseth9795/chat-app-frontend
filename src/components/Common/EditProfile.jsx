@@ -38,7 +38,7 @@ const socket=getSocket();
   // defining the input fields
   const name = useInputValidation(user?.name);
   const username = useInputValidation(user?.username, usernameValidation);
-  const avatar = useFileHandler("single");
+  const avatar = useFileHandler("single",20);
   const bio = useInputValidation(user?.bio);
   const [updateProfile] = useUpdateProfileMutation();
   const handleEdit = async (e) => {
