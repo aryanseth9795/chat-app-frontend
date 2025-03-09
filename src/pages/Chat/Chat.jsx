@@ -3,7 +3,7 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import SendIcon from "@mui/icons-material/Send";
 import { IconButton, Skeleton, Stack, Typography } from "@mui/material";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FileMenu from "../../components/Dialog/FileMenu";
 import MessageComponent from "../../components/Dialog/MessageComponent";
 import AppLayout from "../../components/Layouts/Applayouts";
@@ -26,6 +26,9 @@ import { useNavigate } from "react-router-dom";
 const Chat = ({ chatId, user }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+
+  const {OnlineUser}=useSelector((state)=>state.Chat)
   // creating container Ref
   const containerref = useRef(null);
   const bottomRef = useRef(null);
@@ -60,8 +63,9 @@ const Chat = ({ chatId, user }) => {
     isLoading,
     isError: chatDetailsisError,
     error: chatDetailserror,
+    refetch
   } = useChatDetailsQuery(chatId ? { chatId } : skipToken);
-  // useChatDetailsQuery({chatId}, {skip: !chatId });
+  
 
   // fetching messages chunk
   const oldMessageChunks = useGetMessagesQuery({ chatId, page });
@@ -151,6 +155,11 @@ const Chat = ({ chatId, user }) => {
       dispatch(setmember(chatDetails?.chatDetails));
     }
   }, [chatId, chatDetails]);
+
+useEffect(()=>{
+  refetch()
+},[OnlineUser])
+
   // Chating status
   const Timerref = useRef(null);
   const messagehandler = (e) => {

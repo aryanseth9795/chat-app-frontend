@@ -46,6 +46,10 @@ import AvatarCard from "../Common/AvatarCard";
 import { useAsyncMutation } from "../../hooks/customHooks";
 import { useDeleteChatMutation } from "../../Redux/api/api";
 import Person2Icon from "@mui/icons-material/Person2";
+import moment from "moment";
+
+
+
 //calling lazy components
 const NewGroupDialog = lazy(() => import("../Dialog/NewGroupDialog"));
 const NotificationDialog = lazy(() => import("../Dialog/NotificationDialog "));
@@ -237,7 +241,7 @@ const Header = () => {
                   />
                   <Box>
                     <Typography>{member?.name}</Typography>
-                    {isOnline ? "Online" : ""}
+                    {isOnline ? "Online" : `Last Seen At ${moment(member?.lastseen).format("h:mm A")}`}
                   </Box>
 
                   <Box display={member ? "flex" : "none"}>

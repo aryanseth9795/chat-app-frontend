@@ -5,7 +5,7 @@ import moment from "moment";
 import { fileFormat } from "../../lib/feature";
 import RenderAttachment from "../Common/RenderAttachment";
 const MessageComponent = ({ message, user }) => {
-  // console.log("message at ",message);
+
   const { sender, content, attachments = [], createdAt } = message;
 
   const samesender = sender?._id === user?._id;
