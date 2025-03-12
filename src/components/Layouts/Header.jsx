@@ -241,7 +241,8 @@ const Header = () => {
                   />
                   <Box>
                     <Typography>{member?.name}</Typography>
-                    {isOnline ? "Online" : `Last Seen At ${moment(member?.lastseen).format("h:mm A")}`}
+                    
+                  <Typography variant="caption">  {isOnline ? "Online" : `Last Seen At ${moment(member?.lastseen).format("h:mm A")}`}</Typography>
                   </Box>
 
                   <Box display={member ? "flex" : "none"}>

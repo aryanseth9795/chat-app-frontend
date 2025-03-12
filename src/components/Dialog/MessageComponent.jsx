@@ -6,7 +6,7 @@ import { fileFormat } from "../../lib/feature";
 import RenderAttachment from "../Common/RenderAttachment";
 const MessageComponent = ({ message, user }) => {
 
-  const { sender, content, attachments = [], createdAt } = message;
+  const { sender, content, attachments = [], createdAt,status } = message;
 
   const samesender = sender?._id === user?._id;
 
@@ -51,6 +51,11 @@ const MessageComponent = ({ message, user }) => {
 
       <Typography variant="caption"     alignSelf={"flex-end" }>
         {moment(createdAt).format("h:mm A")}
+       
+      </Typography>
+      <Typography variant="caption"     alignSelf={"flex-end" }>
+        
+        {samesender ? status:""}
       </Typography>
     </div>
   );

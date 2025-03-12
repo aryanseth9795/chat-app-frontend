@@ -14,7 +14,10 @@ import {
   REFETCH_CHATS,
   START_TYPING,
   STOP_TYPING,
+  SEEN_MESSAGE,
+  UPDATE_SEEN_MESSAGE,
 } from "../../constants/event";
+
 import { useError, useSocketEventHook } from "../../hooks/customHooks";
 import { useChatDetailsQuery, useGetMessagesQuery } from "../../Redux/api/api";
 import { setIsFileMenu, setIsMenu } from "../../Redux/slices/MiscSlice";
@@ -27,8 +30,7 @@ const Chat = ({ chatId, user }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-
-  const {OnlineUser}=useSelector((state)=>state.Chat)
+  const { OnlineUser } = useSelector((state) => state.Chat);
   // creating container Ref
   const containerref = useRef(null);
   const bottomRef = useRef(null);
@@ -63,9 +65,8 @@ const Chat = ({ chatId, user }) => {
     isLoading,
     isError: chatDetailsisError,
     error: chatDetailserror,
-    refetch
+    refetch,
   } = useChatDetailsQuery(chatId ? { chatId } : skipToken);
-  
 
   // fetching messages chunk
   const oldMessageChunks = useGetMessagesQuery({ chatId, page });
@@ -101,6 +102,12 @@ const Chat = ({ chatId, user }) => {
     (data) => {
       if (data.chatId !== chatId) return;
       setMessages((prev) => [...prev, data.message]);
+      socket.emit(SEEN_MESSAGE, {
+        chatId: data.chatId,
+        messageId: data.message?._id,
+        sender: data?.message?.sender?.id,
+      });
+      console.log(data);
     },
     [chatId]
   );
@@ -123,12 +130,23 @@ const Chat = ({ chatId, user }) => {
     oldMessageChunks?.refetch();
     navigate("/");
   }, []);
+  const updateMessageSeen = useCallback((data) => {
+    if (data.chatId !== chatId) return;
+    setMessages((prev_mess) =>
+      prev_mess?.map((message) =>
+        message?._id === data.messageId
+          ? { ...message, status: "Seen" }
+          : message
+      )
+    );
+  }, []);
 
   const EventsObject = {
     [NEW_MESSAGE]: newMessageHandler,
     [START_TYPING]: startTypingListen,
     [STOP_TYPING]: stopTypingListen,
     [REFETCH_CHATS]: refetchChatDetails,
+    [UPDATE_SEEN_MESSAGE]: updateMessageSeen,
   };
 
   useSocketEventHook(socket, EventsObject);
@@ -156,9 +174,9 @@ const Chat = ({ chatId, user }) => {
     }
   }, [chatId, chatDetails]);
 
-useEffect(()=>{
-  refetch()
-},[OnlineUser])
+  useEffect(() => {
+    refetch();
+  }, [OnlineUser]);
 
   // Chating status
   const Timerref = useRef(null);
@@ -203,7 +221,7 @@ useEffect(()=>{
             return <MessageComponent message={mes} user={user} key={mes._id} />;
           })}
 
-        {memberTyping && <Typography>Typing...</Typography>}
+        {memberTyping && <Typography variant="body">Typing...</Typography>}
 
         {/* Auto Scrolling to bottom */}
         <div ref={bottomRef} />

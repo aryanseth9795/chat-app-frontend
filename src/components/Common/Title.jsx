@@ -3,7 +3,7 @@
 import { Helmet } from "react-helmet-async";
 
 export default function Title({
-  title = "ChatsUP",
+  title = "ChatsApp",
   desc = "This is chat app made by Aryan Seth",
 }) {
   return (
