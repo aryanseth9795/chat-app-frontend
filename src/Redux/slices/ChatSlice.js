@@ -26,10 +26,18 @@ const ChatSlice = createSlice({
       );
 
       if (index !== -1) {
-        state.chatAlert[index].alertCount += 1;
+        state.chatAlert[index].count += 1;
       } else {
-        state.chatAlert.push({ chatId: action.payload.chatId, alertCount: 1 });
+        state.chatAlert.push({
+          chatId: action.payload.chatId,
+          count: 1,
+          sender: action.payload.sender,
+        });
       }
+    },
+
+    setchatIntial: (state, action) => {
+      state.chatAlert = action.payload;
     },
 
     ResetchatAlert: (state, action) => {
@@ -53,6 +61,7 @@ export const {
   setChatAlert,
   ResetchatAlert,
   setmember,
-  setOnlineUser
+  setOnlineUser,
+  setchatIntial,
 } = ChatSlice.actions;
 export default ChatSlice;

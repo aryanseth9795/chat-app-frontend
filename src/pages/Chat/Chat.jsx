@@ -16,13 +16,19 @@ import {
   STOP_TYPING,
   SEEN_MESSAGE,
   UPDATE_SEEN_MESSAGE,
+  MARK_ALL_READ_MESSAGE,
+  REFETCH_MESSAGE,
 } from "../../constants/event";
 
 import { useError, useSocketEventHook } from "../../hooks/customHooks";
 import { useChatDetailsQuery, useGetMessagesQuery } from "../../Redux/api/api";
 import { setIsFileMenu, setIsMenu } from "../../Redux/slices/MiscSlice";
 import { getSocket } from "../../socket";
-import { ResetchatAlert, setmember } from "../../Redux/slices/ChatSlice";
+import {
+  ResetchatAlert,
+  setchatIntial,
+  setmember,
+} from "../../Redux/slices/ChatSlice";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useNavigate } from "react-router-dom";
 
@@ -30,7 +36,7 @@ const Chat = ({ chatId, user }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { OnlineUser } = useSelector((state) => state.Chat);
+  const { OnlineUser, chatAlert } = useSelector((state) => state.Chat);
   // creating container Ref
   const containerref = useRef(null);
   const bottomRef = useRef(null);
@@ -58,6 +64,20 @@ const Chat = ({ chatId, user }) => {
   }, [allMessages]);
 
   const socket = getSocket();
+
+  useEffect(() => {
+    const isPresent = chatAlert.find((item) => item.chatId === chatId);
+
+    if (isPresent?.count) {
+      socket.emit(MARK_ALL_READ_MESSAGE, {
+        chatId,
+        receiver: user._id,
+        sender: isPresent?.sender,
+      });
+      const newList = chatAlert.filter((item) => item.chatid !== chatId);
+      dispatch(setchatIntial(newList));
+    }
+  }, [chatId]);
 
   // fetching chatDetails from server using chatId
   const {
@@ -102,12 +122,15 @@ const Chat = ({ chatId, user }) => {
     (data) => {
       if (data.chatId !== chatId) return;
       setMessages((prev) => [...prev, data.message]);
-      socket.emit(SEEN_MESSAGE, {
-        chatId: data.chatId,
-        messageId: data.message?._id,
-        sender: data?.message?.sender?.id,
-      });
-      console.log(data);
+
+      // recieving user
+      if (data?.message?.sender?.id !== user?._id) {
+        socket.emit(SEEN_MESSAGE, {
+          chatId: data.chatId,
+          messageId: data.message?._id,
+          sender: data?.message?.sender?._id,
+        });
+      }
     },
     [chatId]
   );
@@ -118,6 +141,8 @@ const Chat = ({ chatId, user }) => {
     },
     [chatId]
   );
+
+  //  avoid unnessary render loging
 
   const stopTypingListen = useCallback(
     (data) => {
@@ -141,12 +166,21 @@ const Chat = ({ chatId, user }) => {
     );
   }, []);
 
+  const refetchMessage = useCallback(({ refetchId }) => {
+    if (chatId === refetchId) {
+      oldMessageChunks.refetch();
+      setMessages([]);
+      setData(oldMessageChunks?.data?.messages || []);
+    }
+  }, []);
+
   const EventsObject = {
     [NEW_MESSAGE]: newMessageHandler,
     [START_TYPING]: startTypingListen,
     [STOP_TYPING]: stopTypingListen,
     [REFETCH_CHATS]: refetchChatDetails,
     [UPDATE_SEEN_MESSAGE]: updateMessageSeen,
+    [REFETCH_MESSAGE]: refetchMessage,
   };
 
   useSocketEventHook(socket, EventsObject);

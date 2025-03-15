@@ -44,7 +44,7 @@ const ChatItem = ({
           <Typography variant="caption">{username}</Typography>
           {newMessageAlerts && (
             <Typography variant="caption" color={"#e53935"}>
-              {newMessageAlerts.alertCount} New Message
+              {newMessageAlerts.count} New Message
             </Typography>
           )}
         </Stack>

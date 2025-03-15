@@ -20,14 +20,12 @@ const ChatList = ({
     <Stack width={w}>
       {chats.map((data, i) => {
         const { _id, avatar, name, groupchat, members, username } = data;
-        const newMessageAlerts = newMessageAlert.find(
+        const newMessageAlerts = newMessageAlert?.find(
           ({ chatId }) => chatId === _id
         );
+        // console.log(newMessageAlert," chatList")
 
-
-       
         const isOnline = members.some((memeber) =>
-        
           onlineusers.includes(memeber)
         );
         return (

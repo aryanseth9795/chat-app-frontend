@@ -17,10 +17,12 @@ import {
   REFETCH_CHATS,
   ONLINE_USERS,
   REFETCH_ONLINE_USER,
+  FETCH_UNREAD_MESSAGES,
 } from "../../constants/event.js";
 import {
   NotificationCountIncrement,
   setChatAlert,
+  setchatIntial,
   setOnlineUser,
 } from "../../Redux/slices/ChatSlice.js";
 
@@ -44,6 +46,7 @@ const AppLayout = () => (WrappedComponent) => {
       if (!isLoading) {
         socket.emit(ONLINE_USERS, { member });
         socket.emit(REFETCH_ONLINE_USER, { member });
+        socket.emit(FETCH_UNREAD_MESSAGES);
       }
     }, [data]);
 
@@ -81,6 +84,10 @@ const AppLayout = () => (WrappedComponent) => {
     const RefectchOnlineUserList = useCallback(() => {
       socket.emit(REFETCH_ONLINE_USER)
     }, []);
+    const UnReadMessages = useCallback(({unreaddata}) => {
+  dispatch(setchatIntial(unreaddata))
+  console.log("unread",unreaddata)
+    }, []);
 
     const socketEvents = {
       [NEW_MESSAGE_ALERT]: newMessageAlert,
@@ -88,6 +95,7 @@ const AppLayout = () => (WrappedComponent) => {
       [REFETCH_CHATS]: RefetechList,
       [ONLINE_USERS]: OnlineUserList,
       [REFETCH_ONLINE_USER]: RefectchOnlineUserList,
+      [FETCH_UNREAD_MESSAGES]:UnReadMessages
     };
 
     useSocketEventHook(socket, socketEvents);
