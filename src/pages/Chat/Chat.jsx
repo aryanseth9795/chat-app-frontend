@@ -69,6 +69,7 @@ const Chat = ({ chatId, user }) => {
     const isPresent = chatAlert.find((item) => item.chatId === chatId);
 
     if (isPresent?.count) {
+     
       socket.emit(MARK_ALL_READ_MESSAGE, {
         chatId,
         receiver: user._id,
@@ -120,11 +121,12 @@ const Chat = ({ chatId, user }) => {
 
   const newMessageHandler = useCallback(
     (data) => {
+      console.log("same chat", data.chatId === chatId);
       if (data.chatId !== chatId) return;
       setMessages((prev) => [...prev, data.message]);
 
       // recieving user
-      if (data?.message?.sender?.id !== user?._id) {
+      if (data?.message?.sender?._id.toString() !== user?._id.toString()) {
         socket.emit(SEEN_MESSAGE, {
           chatId: data.chatId,
           messageId: data.message?._id,

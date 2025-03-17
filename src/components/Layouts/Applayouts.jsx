@@ -34,13 +34,11 @@ const AppLayout = () => (WrappedComponent) => {
     const chatId = param?.id;
     const { isMobile } = useSelector((state) => state.Misc);
     const { user } = useSelector((state) => state.Auth);
-    const { chatAlert,OnlineUser } = useSelector((state) => state.Chat);
+    const { chatAlert, OnlineUser } = useSelector((state) => state.Chat);
 
     const { data, error, isError, isLoading, refetch } = useMychatListQuery();
 
     const member = data?.chats?.flatMap((user) => user?.members);
-   
-
 
     useEffect(() => {
       if (!isLoading) {
@@ -76,17 +74,17 @@ const AppLayout = () => (WrappedComponent) => {
       refetch();
     }, []);
 
-    const OnlineUserList = useCallback(({ onlineMembersset}) => {
-      dispatch(setOnlineUser(onlineMembersset))
-      
+    const OnlineUserList = useCallback(({ onlineMembersset }) => {
+      dispatch(setOnlineUser(onlineMembersset));
     }, []);
 
     const RefectchOnlineUserList = useCallback(() => {
-      socket.emit(REFETCH_ONLINE_USER)
+      socket.emit(REFETCH_ONLINE_USER);
     }, []);
-    const UnReadMessages = useCallback(({unreaddata}) => {
-  dispatch(setchatIntial(unreaddata))
-  console.log("unread",unreaddata)
+    
+    const UnReadMessages = useCallback(({ unreaddata }) => {
+      dispatch(setchatIntial(unreaddata));
+     
     }, []);
 
     const socketEvents = {
@@ -95,7 +93,7 @@ const AppLayout = () => (WrappedComponent) => {
       [REFETCH_CHATS]: RefetechList,
       [ONLINE_USERS]: OnlineUserList,
       [REFETCH_ONLINE_USER]: RefectchOnlineUserList,
-      [FETCH_UNREAD_MESSAGES]:UnReadMessages
+      [FETCH_UNREAD_MESSAGES]: UnReadMessages,
     };
 
     useSocketEventHook(socket, socketEvents);
