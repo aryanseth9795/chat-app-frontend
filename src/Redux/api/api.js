@@ -70,7 +70,7 @@ export const apiSlice = createApi({
         url: `/chats/message/${chatId}?page=${page}`,
         credentials: "include",
       }),
-      invalidatesTags:["Chats"]
+          keepUnusedDataFor: 0,
     }),
 
     // Send Attachments
