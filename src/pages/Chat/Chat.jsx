@@ -170,9 +170,10 @@ const Chat = ({ chatId, user }) => {
 
   const refetchMessage = useCallback(({ refetchId }) => {
     if (chatId === refetchId) {
+      setPages(1);
       oldMessageChunks.refetch();
       setMessages([]);
-      setData(oldMessageChunks?.data?.messages || []);
+      // setData(oldMessageChunks?.data?.messages || []);
     }
   }, []);
 
