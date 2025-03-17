@@ -172,7 +172,7 @@ const Chat = ({ chatId, user }) => {
     if (chatId === refetchId) {
       oldMessageChunks.refetch();
       setMessages([]);
-      // setData(oldMessageChunks?.data?.messages || []);
+      setData(oldMessageChunks?.data?.messages || []);
     }
   }, []);
 
